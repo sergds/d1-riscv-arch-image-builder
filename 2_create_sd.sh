@@ -30,7 +30,7 @@ function check_required_file() {
 function probe_partition_separator() {
     DEVICE=${1}
 
-    [ -b /dev/loop0p1 ] && echo 'p' || echo ''
+    [ -b ${DEVICE}p1 ] && echo 'p' || echo ''
 }
 
 DEVICE=${1}
