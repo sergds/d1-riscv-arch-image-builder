@@ -41,6 +41,4 @@ The second script uses `sudo` for root access. Like any random script from a ran
 # Problems
 ## 06.04.2022
 - no WiFi!
-- When creating the `boot.scr` for some unkown reason the variables (like `${kernel_addr_r}`) are replaced with nothing, which renders the script useless.
-    - solution: hardcoding addresses, not nice but does the job
 - No HDMI (though, i'm unsure about the state of HDMI support in general)

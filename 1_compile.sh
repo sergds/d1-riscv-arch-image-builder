@@ -6,21 +6,21 @@ set -e
 source ./consts.sh
 
 function clean_dir() {
-    DIR=${1}
+    _DIR=${1}
 
     # kind of dangerous ...
-    [ "${DIR}" == '/' ] && extit -1
-    rm -rf ${DIR}
+    [ "${_DIR}" == '/' ] && extit -1
+    rm -rf ${_DIR} || true
 }
 
 function pin_commit() {
-    COMMIT=${1}
+    _COMMIT=${1}
 
     pushd ${2}
-    COMMIT_IS=`git rev-parse HEAD`
+    _COMMIT_IS=`git rev-parse HEAD`
     popd
 
-    [ "${IGNORE_COMMITS}" != '0' ] || [ ${COMMIT} == ${COMMIT_IS} ]
+    [ "${IGNORE_COMMITS}" != '0' ] || [ ${_COMMIT} == ${_COMMIT_IS} ]
 }
 
 for DEP in riscv64-linux-gnu-gcc swig ; do
@@ -31,7 +31,7 @@ mkdir -p build
 mkdir -p ${OUT_DIR}
 cd build
 
-if [ ! -f "${OUT_DIR}/boot0_sdcard_sun20iw1p1.bin" ] ; then 
+if [ ! -f "${OUT_DIR}/boot0_sdcard_sun20iw1p1.bin" ] ; then
     # build Boot0
     DIR='sun20i_d1_spl'
     clean_dir ${DIR}
@@ -87,25 +87,19 @@ EOF
     cp u-boot.toc1 ${OUT_DIR}
 fi
 
-if [ ! -f "${OUT_DIR}/boot.scr" ] ; then 
+if [ ! -f "${OUT_DIR}/boot.scr" ] ; then
+    DIR='u-boot'
+
     # https://andreas.welcomes-you.com/boot-sw-debian-risc-v-lichee-rv/
-#     cat << EOF > licheerv_u-boot-bootscr.txt
-# echo "Loading kernel from mmc 0:1 to address ${kernel_addr_r}"
-# load mmc 0:1 ${kernel_addr_r} Image
-# setenv bootargs "earlycon=sbi console=ttyS0,115200n8 root=/dev/mmcblk0p2"
-# echo "Booting kernel with bootargs as $bootargs; and fdtcontroladdr is $fdtcontroladdr"
-# booti ${kernel_addr_r} - ${fdtcontroladdr}
-# EOF
-    # WHY?! all variables are replaced with '' resulting in an useless script ...
-    cat << EOF > licheerv_u-boot-bootscr.txt
-echo "Loading kernel from mmc 0:1 to address $kernel_addr_r"
-load mmc 0:1 0x40040000 Image
-setenv bootargs "earlycon=sbi console=ttyS0,115200n8 root=/dev/mmcblk0p2"
-echo "Booting kernel with bootargs as ${bootargs}; and fdtcontroladdr is ${fdtcontroladdr}"
-booti 0x40040000 - 0x5fb63ed0
+    cat << 'EOF' > bootscr.txt
+setenv bootargs earlycon=sbi console=ttyS0,115200n8 root=/dev/mmcblk0p2
+echo "Loading kernel from mmc 0:1 to address ${kernel_addr_r}"
+load mmc 0:1 ${kernel_addr_r} Image
+echo "Booting kernel with bootargs as $bootargs; and fdtcontroladdr is $fdtcontroladdr"
+booti ${kernel_addr_r} - ${fdtcontroladdr}
 EOF
-    ${DIR}/tools/mkimage -T script -O linux -A ${ARCH} -d licheerv_u-boot-bootscr.txt boot.scr
-    rm licheerv_u-boot-bootscr.txt
+    ${DIR}/tools/mkimage -T script -C none -O linux -A ${ARCH} -d bootscr.txt boot.scr
+    rm bootscr.txt
     cp boot.scr ${OUT_DIR}
 fi
 
@@ -115,6 +109,7 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ] ; then
     # build kernel
     DIR='linux'
     clean_dir ${DIR}
+    clean_dir ${DIR}-build
 
     # try not to clone complete linux source tree here!
     git clone --depth 1 https://github.com/smaeul/linux -b riscv/d1-wip
@@ -124,12 +119,13 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ] ; then
     # cp ../licheerv_linux_defconfig linux-build/arch/riscv/configs/licheerv_defconfig
     # make ARCH=${ARCH} -C linux O=../linux-build licheerv_defconfig
     make ARCH=${ARCH} -C linux O=../linux-build nezha_defconfig
+
     make CROSS_COMPILE=${CROSS_COMPILE} ARCH=${ARCH} -j `nproc` -C linux-build
     cp linux-build/arch/riscv/boot/Image.gz ${OUT_DIR}
     cp linux-build/arch/riscv/boot/Image ${OUT_DIR}
 fi
 
-# if [ ! -f "${OUT_DIR}/8723ds.ko" ] ; then 
+# if [ ! -f "${OUT_DIR}/8723ds.ko" ] ; then
 #     # build WiFi driver
 #     DIR='rtl8723ds'
 #     clean_dir ${DIR}
