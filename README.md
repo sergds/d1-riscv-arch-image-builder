@@ -1,5 +1,5 @@
 # Image Builder for Archlinux on an Allwinner D1 / Sipeed Lichee RV
-These scripts compile, copy, bake unpack and flash a [ready](https://wiki.archlinux.org/title/installation_guide#Configure_the_system) to use RISC-V Archlinux.
+These scripts compile, copy, bake, unpack and flash a [ready](https://wiki.archlinux.org/title/installation_guide#Configure_the_system) to use RISC-V Archlinux.  
 *With "ready to use" i mean that it boots, you still need to configure everything!*
 
 Special thanks to **smaeul** for all their work!
@@ -22,7 +22,7 @@ Simply loop it using `sudo losetup -f -P <file>` and then use `/dev/loopX` as th
 
 ## Notes
 The second script requires `arch-install-scripts`, `qemu-user-static-bin` (AUR) and `binfmt-qemu-static` (AUR) for an architectural chroot.
-If you don't want to use/do this, change `USE_CHROOT` to `0` in `consts.sh`.
+If you don't want to use/do this, change `USE_CHROOT` to `0` in `consts.sh`.  
 *Keep in mind, that this is just a extracted rootfs with **no** configuration. You probably want to update the system, install an editor and take care of network access/ssh*
 
 Some commits are pinned, this means that in the future this script might stop working since often a git HEAD is checked out. This is intentional.
@@ -41,6 +41,6 @@ The second script uses `sudo` for root access. Like any random script from a ran
 # Problems
 ## 06.04.2022
 - no WiFi!
-- When creating the `boot.scr` for some unkown reason the variables (like `${kernel_addr_r}`) get replaced with nothing, which renders the script useless.
-    - solution: hardcoding, not nice but does the job
-- No HDMI (though, i'm unsure about the state of HDMI support)
+- When creating the `boot.scr` for some unkown reason the variables (like `${kernel_addr_r}`) are replaced with nothing, which renders the script useless.
+    - solution: hardcoding addresses, not nice but does the job
+- No HDMI (though, i'm unsure about the state of HDMI support in general)
