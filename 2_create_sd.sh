@@ -12,10 +12,10 @@ function check_root_fs() {
 }
 
 function check_sd_card_is_block_device() {
-    DEVICE=${1}
+    _DEVICE=${1}
 
-    if [ -z ${DEVICE} ] || [ ! -b ${DEVICE} ] ; then 
-        echo "Error: '${DEVICE}' is empty or not a block device"
+    if [ -z ${_DEVICE} ] || [ ! -b ${_DEVICE} ] ; then
+        echo "Error: '${_DEVICE}' is empty or not a block device"
         exit -1
     fi
 }
@@ -28,9 +28,9 @@ function check_required_file() {
 }
 
 function probe_partition_separator() {
-    DEVICE=${1}
+    _DEVICE=${1}
 
-    [ -b ${DEVICE}p1 ] && echo 'p' || echo ''
+    [ -b ${_DEVICE}p1 ] && echo 'p' || echo ''
 }
 
 DEVICE=${1}
@@ -70,10 +70,8 @@ ${SUDO} mount ${DEVICE}${PART_IDENTITYFIER}2 ${MNT}
 ${SUDO} mkdir -p ${MNT}/boot
 ${SUDO} mount ${DEVICE}${PART_IDENTITYFIER}1 ${MNT}/boot
 
-# extrract rootfs
+# extract rootfs
 ${SUDO} tar -xv --zstd -f ${ROOT_FS} -C ${MNT}
-# creat root:root user login
-# echo 'root' | ${SUDO} passwd --root ${PWD}/${MNT} --stdin 'root'
 
 # install kernel and modules
 ${SUDO} cp ${OUT_DIR}/Image.gz ${OUT_DIR}/Image ${MNT}/boot/
@@ -116,7 +114,7 @@ rm hostname
 # done
 if [ ${USE_CHROOT} != 0 ] ; then
     echo ''
-    echo 'Done! Now setup your new Archlinux!'
+    echo 'Done! Now configure your new Archlinux!'
     echo ''
     echo 'You might want to update and install an editor as well as configure any network'
     echo ' -> https://wiki.archlinux.org/title/installation_guide#Configure_the_system'
@@ -129,17 +127,3 @@ fi
 
 ${SUDO} umount -R ${MNT}
 exit 0
-
-
-
-# ### boot partition
-# ${SUDO} mount ${DEVICE}${PART_IDENTITYFIER}1 ${MNT}/sdcard_boot
-# cp linux-build/arch/riscv/boot/Image.gz ${MNT}/sdcard_boot
-# cp boot.scr ${MNT}/sdcard_boot
-# ${SUDO} umount ${MNT}/sdcard_boot
-# ### rootfs partition
-# ${SUDO} mount ${DEVICE}${PART_IDENTITYFIER}2 ${MNT}/sdcard_rootfs
-# # tar xfJ ${ROOT_FS} ${MNT}/sdcard_rootfs
-# ${SUDO} umount ${MNT}/sdcard_rootfs
-# #rm -rf /mnt/sdcard_boot
-# #rm -rf /mnt/sdcard_rootfs
