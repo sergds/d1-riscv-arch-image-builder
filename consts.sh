@@ -20,7 +20,7 @@ USE_CHROOT=1
 COMMIT_BOOT0='0ad88bfdb723b1ac74cca96122918f885a4781ac' # from 28.02.2022
 COMMIT_UBOOT='7446a47204fd8923b99ced0091667979c4fd27fa' # equals d1-wip (06.04.2022)
 COMMIT_KERNEL='cc63db754b218d3ef9b529a82e04b66252e9bca1' # equals riscv/d1-wip (06.04.2022)
-KERNEL_RELEASE='5.18.0-rc1-gcc63db754b21' # must match commit!
+KERNEL_RELEASE='5.18.0-rc1-gcc63db754b21-dirty' # must match commit!
 # use this (set to something != '') to override the check
 IGNORE_COMMITS=0
 

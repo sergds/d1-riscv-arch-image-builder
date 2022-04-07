@@ -43,7 +43,7 @@ if [ ${USE_CHROOT} != 0 ] ; then
 fi
 check_sd_card_is_block_device ${DEVICE}
 check_root_fs
-for FILE in boot0_sdcard_sun20iw1p1.bin boot.scr Image.gz Image u-boot.toc1 ; do #8723ds.ko
+for FILE in 8723ds.ko boot0_sdcard_sun20iw1p1.bin boot.scr Image.gz Image u-boot.toc1 ; do
     check_required_file ${OUT_DIR}/${FILE}
 done
 
@@ -78,15 +78,15 @@ ${SUDO} cp ${OUT_DIR}/Image.gz ${OUT_DIR}/Image ${MNT}/boot/
 cd build/linux-build
 ${SUDO} make ARCH=${ARCH} INSTALL_MOD_PATH=../../${MNT} KERNELRELEASE=${KERNEL_RELEASE} modules_install
 cd ../..
-# ${SUDO} install -D -p -m 644 ${OUT_DIR}/8723ds.ko ${MNT}/lib/modules/${KERNEL_RELEASE}/kernel/drivers/net/wireless/8723ds.ko
+${SUDO} install -D -p -m 644 ${OUT_DIR}/8723ds.ko ${MNT}/lib/modules/${KERNEL_RELEASE}/kernel/drivers/net/wireless/8723ds.ko
 
 ${SUDO} rm ${MNT}/lib/modules/${KERNEL_RELEASE}/build
 ${SUDO} rm ${MNT}/lib/modules/${KERNEL_RELEASE}/source
 
 ${SUDO} depmod -a -b ${MNT} ${KERNEL_RELEASE}
-# echo '8723ds' >> 8723ds.conf
-# ${SUDO} cp ${OUT_DIR}/8723ds.conf ${MNT}/etc/modules-load.d/
-# rm 8723ds.conf
+echo '8723ds' >> 8723ds.conf
+${SUDO} cp 8723ds.conf ${MNT}/etc/modules-load.d/
+rm 8723ds.conf
 
 # install U-Boot
 ${SUDO} cp ${OUT_DIR}/boot.scr ${MNT}/boot/
@@ -125,5 +125,6 @@ else
     echo 'Done!'
 fi
 
+sync
 ${SUDO} umount -R ${MNT}
 exit 0
