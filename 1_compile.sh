@@ -20,7 +20,7 @@ function pin_commit() {
     _COMMIT_IS=`git rev-parse HEAD`
     popd
 
-    [ "${IGNORE_COMMITS}" != '0' ] || [ ${_COMMIT} == ${_COMMIT_IS} ]
+    [ "${IGNORE_COMMITS}" != '0' ] || [ ${_COMMIT} == ${_COMMIT_IS} ] || exit -1
 }
 
 for DEP in riscv64-linux-gnu-gcc swig ; do
@@ -63,7 +63,7 @@ if [ ! -f "${OUT_DIR}/u-boot.toc1" ] ; then
     git clone https://github.com/smaeul/u-boot.git
     cd ${DIR}
     git checkout d1-wip
-    pin_commit ${COMMIT_UBOOT} . || exit -1
+    pin_commit ${COMMIT_UBOOT} .
 
     make CROSS_COMPILE=${CROSS_COMPILE} ARCH=${ARCH} nezha_defconfig
     # make CROSS_COMPILE=${CROSS_COMPILE} ARCH=${ARCH} lichee_rv_defconfig
@@ -113,26 +113,38 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ] ; then
 
     # try not to clone complete linux source tree here!
     git clone --depth 1 https://github.com/smaeul/linux -b riscv/d1-wip
-    pin_commit ${COMMIT_KERNEL} ${DIR} || exit -1
+    pin_commit ${COMMIT_KERNEL} ${DIR}
 
+    # LicheeRV defconfig
     # mkdir -p linux-build/arch/riscv/configs
     # cp ../licheerv_linux_defconfig linux-build/arch/riscv/configs/licheerv_defconfig
     # make ARCH=${ARCH} -C linux O=../linux-build licheerv_defconfig
+
+    # Nezha defconfig
+    # hackish ...
+    echo 'CONFIG_WIRELESS=y' >> ${DIR}/arch/riscv/configs/nezha_defconfig
+    echo 'CONFIG_CFG80211=m' >> ${DIR}/arch/riscv/configs/nezha_defconfig
     make ARCH=${ARCH} -C linux O=../linux-build nezha_defconfig
+
+    # Archlinux PR #1001 https://github.com/felixonmars/archriscv-packages/pull/1001 config
+    # https://github.com/felixonmars/archriscv-packages/blob/6689a4fdcd76dbbab777803493873f65e127e3e6/linux-nezha-git/config
+    # mkdir -p linux-build/arch/riscv/configs
+    # cp ../arch_nezha_git_config linux-build/arch/riscv/configs/licheerv_defconfig
+    # make ARCH=${ARCH} -C linux O=../linux-build licheerv_defconfig
 
     make CROSS_COMPILE=${CROSS_COMPILE} ARCH=${ARCH} -j `nproc` -C linux-build
     cp linux-build/arch/riscv/boot/Image.gz ${OUT_DIR}
     cp linux-build/arch/riscv/boot/Image ${OUT_DIR}
 fi
 
-# if [ ! -f "${OUT_DIR}/8723ds.ko" ] ; then
-#     # build WiFi driver
-#     DIR='rtl8723ds'
-#     clean_dir ${DIR}
+if [ ! -f "${OUT_DIR}/8723ds.ko" ] ; then
+    # build WiFi driver
+    DIR='rtl8723ds'
+    clean_dir ${DIR}
 
-#     git clone https://github.com/lwfinger/rtl8723ds.git
-#     cd ${DIR}
-#     make CROSS_COMPILE=${CROSS_COMPILE} ARCH=${ARCH} KSRC=../linux-build -j `nproc`  modules
-#     cd ..
-#     cp ${DIR}/8723ds.ko ${OUT_DIR}
-# fi
+    git clone https://github.com/lwfinger/rtl8723ds.git
+    cd ${DIR}
+    make CROSS_COMPILE=${CROSS_COMPILE} ARCH=${ARCH} KSRC=../linux-build -j `nproc`  modules || true
+    cd ..
+    cp ${DIR}/8723ds.ko ${OUT_DIR}
+fi

@@ -29,7 +29,11 @@ Some commits are pinned, this means that in the future this script might stop wo
 
 The second script uses `sudo` for root access. Like any random script from a random stranger from the internet, have a look at the code first and use at own risk!
 
+Things are rebuild whenever the corresponsing `output/<file>` is missing. For example, the kernel is rebuilt when there is no `Image` file.
+
 # Status
+## 07.04.2022
+- WiFi \o/
 ## 06.04.2022
 - Kernel is based on 5.18-rc1
 - WiFi driver fails to build (linking error :feelsbadman:)
@@ -40,5 +44,5 @@ The second script uses `sudo` for root access. Like any random script from a ran
 
 # Problems
 ## 06.04.2022
-- no WiFi!
+- ~no WiFi!~
 - No HDMI (though, i'm unsure about the state of HDMI support in general)
