@@ -125,6 +125,5 @@ else
     echo 'Done!'
 fi
 
-sync
 ${SUDO} umount -R ${MNT}
 exit 0

@@ -92,7 +92,7 @@ if [ ! -f "${OUT_DIR}/boot.scr" ] ; then
 
     # https://andreas.welcomes-you.com/boot-sw-debian-risc-v-lichee-rv/
     cat << 'EOF' > bootscr.txt
-setenv bootargs earlycon=sbi console=ttyS0,115200n8 root=/dev/mmcblk0p2
+setenv bootargs earlycon=sbi console=ttyS0,115200n8 root=/dev/mmcblk0p2 cma=96M
 echo "Loading kernel from mmc 0:1 to address ${kernel_addr_r}"
 load mmc 0:1 ${kernel_addr_r} Image
 echo "Booting kernel with bootargs as $bootargs; and fdtcontroladdr is $fdtcontroladdr"
@@ -121,9 +121,13 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ] ; then
     # make ARCH=${ARCH} -C linux O=../linux-build licheerv_defconfig
 
     # Nezha defconfig
-    # hackish ...
+    # enable WiFi
     echo 'CONFIG_WIRELESS=y' >> ${DIR}/arch/riscv/configs/nezha_defconfig
     echo 'CONFIG_CFG80211=m' >> ${DIR}/arch/riscv/configs/nezha_defconfig
+    # enabled DRM/HDMI
+    echo 'CONFIG_SUN8I_MIXER=m' >> ${DIR}/arch/riscv/configs/nezha_defconfig
+    echo 'CONFIG_SUN8I_DW_HDMI=m' >> ${DIR}/arch/riscv/configs/nezha_defconfig
+
     make ARCH=${ARCH} -C linux O=../linux-build nezha_defconfig
 
     # Archlinux PR #1001 https://github.com/felixonmars/archriscv-packages/pull/1001 config
