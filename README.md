@@ -32,6 +32,8 @@ The second script uses `sudo` for root access. Like any random script from a ran
 Things are rebuild whenever the corresponsing `output/<file>` is missing. For example, the kernel is rebuilt when there is no `Image` file.
 
 # Status
+## 09.04.2022
+- HDMI, tested with LXDE/LXDM
 ## 07.04.2022
 - WiFi \o/
 ## 06.04.2022
@@ -45,4 +47,4 @@ Things are rebuild whenever the corresponsing `output/<file>` is missing. For ex
 # Problems
 ## 06.04.2022
 - ~no WiFi!~
-- No HDMI (though, i'm unsure about the state of HDMI support in general)
+- ~No HDMI (though, i'm unsure about the state of HDMI support in general)~
