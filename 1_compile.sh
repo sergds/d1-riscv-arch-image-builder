@@ -124,9 +124,6 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ] ; then
     # enable WiFi
     echo 'CONFIG_WIRELESS=y' >> ${DIR}/arch/riscv/configs/nezha_defconfig
     echo 'CONFIG_CFG80211=m' >> ${DIR}/arch/riscv/configs/nezha_defconfig
-    # enabled DRM/HDMI
-    echo 'CONFIG_SUN8I_MIXER=m' >> ${DIR}/arch/riscv/configs/nezha_defconfig
-    echo 'CONFIG_SUN8I_DW_HDMI=m' >> ${DIR}/arch/riscv/configs/nezha_defconfig
 
     make ARCH=${ARCH} -C linux O=../linux-build nezha_defconfig
 
