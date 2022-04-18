@@ -169,6 +169,9 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ] ; then
     echo 'CONFIG_USB_NET_CH9200=m' >> ${DIR}/arch/riscv/configs/nezha_defconfig
     echo 'CONFIG_USB_NET_AQC111=m' >> ${DIR}/arch/riscv/configs/nezha_defconfig
     echo 'CONFIG_USB_RTL8153_ECM=m' >> ${DIR}/arch/riscv/configs/nezha_defconfig
+    # enable systemV IPC (needed by fakeroot during makepkg)
+    echo 'CONFIG_SYSVIPC=y' >>${DIR}/arch/riscv/configs/nezha_defconfig
+    echo 'CONFIG_SYSVIPC_SYSCTL=y' >>${DIR}/arch/riscv/configs/nezha_defconfig
 
     make ARCH="${ARCH}" -C linux O=../linux-build nezha_defconfig
 
