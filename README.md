@@ -10,7 +10,7 @@ Special thanks to **smaeul** for all their work!
 - U-Boot based on https://github.com/smaeul/u-boot.git
 - Kernel based on https://github.com/smaeul/linux
 - WiFi driver (rtl8723ds) based on https://github.com/lwfinger/rtl8723ds
-- RootFS based on https://archriscv.felixc.at
+- RootFS based on https://archriscv.felixc.at (root password is `sifive`)
 
 ## How to build
 1. Run `1_compile.sh` which compiles everyhing into the `output` folder.
