@@ -13,6 +13,7 @@ Special thanks to **smaeul** for all their work!
 - RootFS based on https://archriscv.felixc.at (root password is `sifive`)
 
 ## How to build
+1. Install requirements: `pacman -Sy riscv64-linux-gnu-gcc swig cpio python3 python-setuptools base-devel bc`
 1. Run `1_compile.sh` which compiles everyhing into the `output` folder.
 1. Run `2_create_sd.sh /dev/<device>` to flash everything on the SD card.
 1. Configure you Archlinux :rocket:
