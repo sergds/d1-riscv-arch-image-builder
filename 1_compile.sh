@@ -103,7 +103,13 @@ setenv bootargs earlycon=sbi console=ttyS0,115200n8 root=/dev/mmcblk0p2 cma=96M
 echo "Loading kernel from mmc 0:1 to address ${kernel_addr_r}"
 load mmc 0:1 ${kernel_addr_r} Image
 echo "Booting kernel with bootargs as $bootargs; and fdtcontroladdr is $fdtcontroladdr"
-booti ${kernel_addr_r} - ${fdtcontroladdr}
+if load mmc 0:1 ${ramdisk_addr_r} /initramfs-linux.img; then
+    booti ${kernel_addr_r} ${ramdisk_addr_r} ${fdtcontroladdr}
+else
+    booti ${kernel_addr_r} - ${fdtcontroladdr}
+fi;
+# booti ${kernel_addr_r} - ${fdtcontroladdr}
+# ramdisk_addr_r
 EOF
     ${DIR}/tools/mkimage -T script -C none -O linux -A "${ARCH}" -d bootscr.txt boot.scr
     rm bootscr.txt
