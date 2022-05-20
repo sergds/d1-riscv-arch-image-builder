@@ -9,14 +9,14 @@ clean_dir() {
     _DIR=${1}
 
     # kind of dangerous ...
-    [ "${_DIR}" = '/' ] && extit 1
+    [ "${_DIR}" = '/' ] && exit 1
     rm -rf "${_DIR}" || true
 }
 
 pin_commit() {
     _COMMIT=${1}
     _COMMIT_IS=$(git rev-parse HEAD)
-    [ "${IGNORE_COMMITS}" != '0' ] || [ "${_COMMIT}" = "${_COMMIT_IS}" ] || ( echo "Commit missmatch"; exit 1)
+    [ "${IGNORE_COMMITS}" != '0' ] || [ "${_COMMIT}" = "${_COMMIT_IS}" ] || ( echo "Commit mismatch"; exit 1)
 }
 
 patch_config() {
@@ -253,7 +253,7 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ] ; then
         ;;
 
         *)
-            echo "Unkown kernel option '$KERNEL'"
+            echo "Unknown kernel option '$KERNEL'"
             exit 1
         ;;
     esac
