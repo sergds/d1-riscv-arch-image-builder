@@ -25,7 +25,7 @@ export USE_CHROOT=1
 
 # pinned commits (no notice when things change)
 export COMMIT_BOOT0='0ad88bfdb723b1ac74cca96122918f885a4781ac' # from 28.02.2022
-export COMMIT_UBOOT='7446a47204fd8923b99ced0091667979c4fd27fa' # equals d1-wip (06.04.2022)
+export COMMIT_UBOOT='afc07cec423f17ebb4448a19435292ddacf19c9b' # equals d1-wip (28.05.2022)
 export COMMIT_KERNEL='cc63db754b218d3ef9b529a82e04b66252e9bca1' # equals d1-wip-v5.18-rc1
 export KERNEL_RELEASE='5.18.0-rc1-gcc63db754b21-dirty' # must match commit!
 # use this (set to something != 0) to override the check

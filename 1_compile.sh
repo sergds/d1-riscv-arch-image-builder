@@ -59,6 +59,8 @@ if [ ! -f "${OUT_DIR}/u-boot.toc1" ] ; then
     git clone https://github.com/smaeul/opensbi
     cd ${DIR}
     git checkout d1-wip
+    # patch for binutils 2.38
+    git apply ../../opensbi-makefile.patch
     make CROSS_COMPILE="${CROSS_COMPILE}" PLATFORM=generic FW_PIC=y FW_OPTIONS=0x2
     cd ..
     # cp opensbi/build/platform/generic/firmware/fw_dynamic.bin ${OUT_DIR}
@@ -71,6 +73,8 @@ if [ ! -f "${OUT_DIR}/u-boot.toc1" ] ; then
     cd ${DIR}
     git checkout d1-wip
     pin_commit "${COMMIT_UBOOT}"
+    # patch for binutils 2.38
+    git apply ../../uboot-makefile.patch
 
     make CROSS_COMPILE="${CROSS_COMPILE}" ARCH="${ARCH}" nezha_defconfig
     # make CROSS_COMPILE=${CROSS_COMPILE} ARCH=${ARCH} lichee_rv_defconfig
