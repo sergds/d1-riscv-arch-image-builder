@@ -14,9 +14,9 @@ Special thanks to **smaeul** for all their work!
 
 ## How to build
 1. Install requirements: `pacman -Sy riscv64-linux-gnu-gcc swig cpio python3 python-setuptools base-devel bc`
-1. Run `1_compile.sh` which compiles everyhing into the `output` folder.
+1. Run `1_compile.sh` which compiles everything into the `output` folder.
 1. Run `2_create_sd.sh /dev/<device>` to flash everything on the SD card.
-1. Configure you Archlinux :rocket:
+1. Configure your Archlinux :rocket:
 
 ## Using loop image file instead of a SD card
 Simply loop it using `sudo losetup -f -P <file>` and then use `/dev/loopX` as the target device.
@@ -30,7 +30,7 @@ Some commits are pinned, this means that in the future this script might stop wo
 
 The second script uses `sudo` for root access. Like any random script from a random stranger from the internet, have a look at the code first and use at own risk!
 
-Things are rebuild whenever the corresponsing `output/<file>` is missing. For example, the kernel is rebuilt when there is no `Image` file.
+Things are rebuild whenever the corresponding `output/<file>` is missing. For example, the kernel is rebuilt when there is no `Image` file.
 
 # Status
 ## 14.06.2022
@@ -49,7 +49,7 @@ Things are rebuild whenever the corresponsing `output/<file>` is missing. For ex
 - Kernel is based on 5.18-rc1
 - WiFi driver fails to build (linking error :feelsbadman:)
 - Both kernel and U-Boot are using `nezha_defconfig` since i found them more reliable
-    - With the [licheerv_linux_defconfig](https://andreas.welcomes-you.com/media/files/licheerv_linux_defconfig) from [here](https://andreas.welcomes-you.com/boot-sw-debian-risc-v-lichee-rv/) the kernel failes to find the sd card (or its partitions? not sure what exactly goes wrong)
+    - With the [licheerv_linux_defconfig](https://andreas.welcomes-you.com/media/files/licheerv_linux_defconfig) from [here](https://andreas.welcomes-you.com/boot-sw-debian-risc-v-lichee-rv/) the kernel fails to find the sd card (or its partitions? not sure what exactly goes wrong)
 - HDMI is not working (at least on the one screen i've tested it)
 
 
