@@ -59,8 +59,6 @@ if [ ! -f "${OUT_DIR}/u-boot.toc1" ] ; then
     git clone https://github.com/smaeul/opensbi
     cd ${DIR}
     git checkout d1-wip
-    # patch for binutils 2.38
-    git apply ../../opensbi-makefile.patch
     make CROSS_COMPILE="${CROSS_COMPILE}" PLATFORM=generic FW_PIC=y FW_OPTIONS=0x2
     cd ..
     # cp opensbi/build/platform/generic/firmware/fw_dynamic.bin ${OUT_DIR}
@@ -103,7 +101,7 @@ if [ ! -f "${OUT_DIR}/boot.scr" ] ; then
 
     # https://andreas.welcomes-you.com/boot-sw-debian-risc-v-lichee-rv/
     cat << 'EOF' > bootscr.txt
-setenv bootargs earlycon=sbi console=ttyS0,115200n8 root=/dev/mmcblk0p2 cma=96M
+setenv bootargs earlycon=sbi console=ttyS0,115200n8 root=/dev/mmcblk0p2 rootwait cma=96M
 echo "Loading kernel from mmc 0:1 to address ${kernel_addr_r}"
 load mmc 0:1 ${kernel_addr_r} Image
 echo "Booting kernel with bootargs as $bootargs; and fdtcontroladdr is $fdtcontroladdr"
@@ -129,7 +127,7 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ] ; then
     clean_dir ${DIR}-build
 
     # try not to clone complete linux source tree here!
-    git clone --depth 1 https://github.com/smaeul/linux -b d1-wip-v5.18-rc1
+    git clone --depth 1 https://github.com/smaeul/linux -b "${KERNEL_TAG}"
     cd ${DIR}
     pin_commit "${COMMIT_KERNEL}"
     cd ..

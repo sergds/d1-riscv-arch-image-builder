@@ -23,11 +23,15 @@ export SUDO='sudo'
 # use arch-chroot?
 export USE_CHROOT=1
 
+# use extlinux ('extlinux') or boot.scr ('script')?
+export BOOT_METHOD='extlinux'
+
 # pinned commits (no notice when things change)
-export COMMIT_BOOT0='0ad88bfdb723b1ac74cca96122918f885a4781ac' # from 28.02.2022
+export COMMIT_BOOT0='882671fcf53137aaafc3a94fa32e682cb7b921f1' # from 14.06.2022
 export COMMIT_UBOOT='afc07cec423f17ebb4448a19435292ddacf19c9b' # equals d1-wip (28.05.2022)
-export COMMIT_KERNEL='cc63db754b218d3ef9b529a82e04b66252e9bca1' # equals d1-wip-v5.18-rc1
-export KERNEL_RELEASE='5.18.0-rc1-gcc63db754b21-dirty' # must match commit!
+export COMMIT_KERNEL='fe178cf0153d98b71cb01a46c8cc050826a17e77' # equals riscv/d1-wip head
+export KERNEL_TAG='riscv/d1-wip'
+export KERNEL_RELEASE='5.19.0-rc1-gfe178cf0153d-dirty' # must match commit!
 # use this (set to something != 0) to override the check
 export IGNORE_COMMITS=0
 
