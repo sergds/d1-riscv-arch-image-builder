@@ -1,7 +1,7 @@
 #!/usr/bin/sh
 
 set -e
-set -x
+# set -x
 
 . ./consts.sh
 
@@ -28,10 +28,12 @@ fi
 tmpfile=$($SSH mktemp -d arch-image-builder.XXXXXX)
 
 # copy files
+echo "copying files..."
 scp "$OUT_DIR"/Image "$OUT_DIR"/8723ds.ko "$SSH_TARGET":"$tmpfile"
 scp -r "$MNT/$MODULES" "$SSH_TARGET":"$tmpfile"
 
 # write install script
+echo "writing install.sh..."
 $SSH sh -c "cat <<EOF > "$tmpfile"/install.sh
 #!/usr/bin/sh
 
@@ -66,6 +68,7 @@ depmod -v
 EOF"
 
 # run install script
+echo "running install.sh on ${SSH_TARGET}..."
 ssh -t $SSH_TARGET "cd $tmpfile; pwd; sudo sh ./install.sh"
 
 # clean up

@@ -90,7 +90,18 @@ ${SUDO} cp 8723ds.conf "${MNT}/etc/modules-load.d/"
 rm 8723ds.conf
 
 # install U-Boot
-${SUDO} cp "${OUT_DIR}/boot.scr" "${MNT}/boot/"
+if [ "${BOOT_METHOD}" = 'script' ] ; then 
+    ${SUDO} cp "${OUT_DIR}/boot.scr" "${MNT}/boot/"
+elif [ "${BOOT_METHOD}" = 'extlinux' ] ; then 
+    ${SUDO} mkdir -p "${MNT}/boot/extlinux"
+    cat << EOF > extlinux.conf
+label default
+        linux   ../Image
+        append  earlycon=sbi console=ttyS0,115200n8 root=/dev/mmcblk0p2 rootwait cma=96M
+EOF
+    ${SUDO} cp extlinux.conf "${MNT}/boot/extlinux/extlinux.conf"
+    rm extlinux.conf
+fi
 
 # fstab
 cat << EOF > fstab
