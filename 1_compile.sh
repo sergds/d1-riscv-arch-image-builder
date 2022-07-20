@@ -43,7 +43,7 @@ if [ ! -f "${OUT_DIR}/boot0_sdcard_sun20iw1p1.bin" ] ; then
     DIR='sun20i_d1_spl'
     clean_dir ${DIR}
 
-    git clone https://github.com/smaeul/sun20i_d1_spl
+    git clone "${SOURCE_BOOT0}"
     cd "${DIR}"
     git checkout "${COMMIT_BOOT0}"
     make CROSS_COMPILE="${CROSS_COMPILE}" p=sun20iw1p1 mmc
@@ -56,9 +56,8 @@ if [ ! -f "${OUT_DIR}/u-boot.toc1" ] ; then
     DIR='opensbi'
     clean_dir ${DIR}
 
-    git clone https://github.com/smaeul/opensbi
+    git clone "${SOURCE_OPENSBI}" -b d1-wip
     cd ${DIR}
-    git checkout d1-wip
     make CROSS_COMPILE="${CROSS_COMPILE}" PLATFORM=generic FW_PIC=y FW_OPTIONS=0x2
     cd ..
     # cp opensbi/build/platform/generic/firmware/fw_dynamic.bin ${OUT_DIR}
@@ -67,7 +66,7 @@ if [ ! -f "${OUT_DIR}/u-boot.toc1" ] ; then
     DIR='u-boot'
     clean_dir ${DIR}
 
-    git clone https://github.com/smaeul/u-boot.git
+    git clone "${SOURCE_UBOOT}"
     cd ${DIR}
     git checkout d1-wip
     pin_commit "${COMMIT_UBOOT}"
@@ -127,7 +126,7 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ] ; then
     clean_dir ${DIR}-build
 
     # try not to clone complete linux source tree here!
-    git clone --depth 1 https://github.com/smaeul/linux -b "${KERNEL_TAG}"
+    git clone --depth 1 "${SOURCE_KERNEL}" -b "${KERNEL_TAG}"
     cd ${DIR}
     pin_commit "${COMMIT_KERNEL}"
     cd ..
@@ -144,6 +143,7 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ] ; then
             echo 'CONFIG_WIRELESS=y' >> ${DIR}/arch/riscv/configs/nezha_defconfig
             echo 'CONFIG_CFG80211=m' >> ${DIR}/arch/riscv/configs/nezha_defconfig
             # enable /proc/config.gz
+            echo 'CONFIG_IKCONFIG=m' >> ${DIR}/arch/riscv/configs/nezha_defconfig
             echo 'CONFIG_IKCONFIG_PROC=y' >> ${DIR}/arch/riscv/configs/nezha_defconfig
             # There is no LAN. so let there be USB-LAN
             echo 'CONFIG_USB_NET_DRIVERS=m' >> ${DIR}/arch/riscv/configs/nezha_defconfig
