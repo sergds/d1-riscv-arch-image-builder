@@ -22,7 +22,7 @@ check_sd_card_is_block_device() {
 
 check_required_file() {
     if [ ! -f "${1}" ] ; then
-        echo "Missing file: ${1}, did you compile everyhing first?"
+        echo "Missing file: ${1}, did you compile everything first?"
         exit 1
     fi
 }
