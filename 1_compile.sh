@@ -204,6 +204,8 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ] ; then
             echo 'CONFIG_MEDIA_CONTROLLER_REQUEST_API=y' >> ${DIR}/arch/riscv/configs/nezha_defconfig
             echo 'CONFIG_V4L_MEM2MEM_DRIVERS=y' >> ${DIR}/arch/riscv/configs/nezha_defconfig
             echo 'CONFIG_VIDEO_SUNXI_CEDRUS=y' >> ${DIR}/arch/riscv/configs/nezha_defconfig
+            # enable binfmt_misc
+            echo 'CONFIG_BINFMT_MISC=y' >> ${DIR}/arch/riscv/configs/nezha_defconfig
             # debug options
             if [ $DEBUG = 'y' ]; then
                 echo 'CONFIG_DEBUG_INFO=y' >> ${DIR}/arch/riscv/configs/nezha_defconfig
