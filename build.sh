@@ -2,7 +2,7 @@
 sudo -i
 dd if=/dev/zero of=./archlinux_riscv.img bs=1M count=1548
 losetup /dev/loop17 ./archlinux_riscv.img
-docker run --name build_riscv /riscv-arch-image:${1}
+docker run --name build_riscv riscv-arch-image:${1}
 docker cp build_riscv:/home/runner/work/riscv-arch-image-builder/riscv-arch-image-builder ../
 sed -i 's/USE_CHROOT=1/USE_CHROOT=0/g' consts.sh
 ./2_create_sd.sh /dev/loop17
