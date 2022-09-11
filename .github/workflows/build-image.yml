@@ -19,7 +19,7 @@ jobs:
       run: 
         docker build . --file Dockerfile --tag riscv-arch-image:${{ github.event.commits[0].id }} 
     - name: build img
-      run: sh build.sh ${{ github.event.commits[0].id }}
+      run: sh build_img.sh ${{ github.event.commits[0].id }}
 
     - name: Upload archive
       uses: actions/upload-artifact@v3
