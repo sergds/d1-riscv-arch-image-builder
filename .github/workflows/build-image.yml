@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Image Builder for Archlinux on an Allwinner D1 / Sipeed Lichee RV CI
 
 on:
   push:
