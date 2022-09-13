@@ -54,8 +54,8 @@ read -r  confirm && [ "${confirm}" = "y" ] || [ "${confirm}" = "Y" ] || exit 1
 
 ${SUDO} dd if=/dev/zero of="${DEVICE}" bs=1M count=200
 ${SUDO} parted -s -a optimal -- "${DEVICE}" mklabel gpt
-${SUDO} parted -s -a optimal -- "${DEVICE}" mkpart primary ext2 40MiB 500MiB
-${SUDO} parted -s -a optimal -- "${DEVICE}" mkpart primary ext4 540MiB 100%
+${SUDO} parted -s -a optimal -- "${DEVICE}" mkpart primary ext2 40MiB 1024MiB
+${SUDO} parted -s -a optimal -- "${DEVICE}" mkpart primary ext4 1064MiB 100%
 ${SUDO} partprobe "${DEVICE}"
 PART_IDENTITYFIER=$(probe_partition_separator "${DEVICE}")
 ${SUDO} mkfs.ext2 -F -L boot "${DEVICE}${PART_IDENTITYFIER}1"
