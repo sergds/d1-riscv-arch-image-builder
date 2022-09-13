@@ -1,0 +1,28 @@
+name: Image Builder for Archlinux on an Allwinner D1 / Sipeed Lichee RV CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Build and push Docker images
+      run: 
+        docker build . --file Dockerfile --tag riscv-arch-image:${{ github.event.commits[0].id }} 
+    - name: build img
+      run: sh build_img.sh ${{ github.event.commits[0].id }}
+
+    - name: Upload archive
+      uses: actions/upload-artifact@v3
+      with:
+        name: archlinux_riscv.img.tar.gz
+        path: /home/runner/work/riscv-arch-image-builder/riscv-arch-image-builder/archlinux_riscv.img.tar.gz
