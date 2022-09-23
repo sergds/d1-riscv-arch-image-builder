@@ -54,12 +54,19 @@ read -r  confirm && [ "${confirm}" = "y" ] || [ "${confirm}" = "Y" ] || exit 1
 
 ${SUDO} dd if=/dev/zero of="${DEVICE}" bs=1M count=200
 ${SUDO} parted -s -a optimal -- "${DEVICE}" mklabel gpt
-${SUDO} parted -s -a optimal -- "${DEVICE}" mkpart primary ext2 40MiB 1024MiB
+${SUDO} parted -s -a optimal -- "${DEVICE}" mkpart primary fat32 40MiB 1024MiB
 ${SUDO} parted -s -a optimal -- "${DEVICE}" mkpart primary ext4 1064MiB 100%
 ${SUDO} partprobe "${DEVICE}"
 PART_IDENTITYFIER=$(probe_partition_separator "${DEVICE}")
 ${SUDO} mkfs.ext2 -F -L boot "${DEVICE}${PART_IDENTITYFIER}1"
 ${SUDO} mkfs.ext4 -F -L root "${DEVICE}${PART_IDENTITYFIER}2"
+
+if [ "${BOOT_METHOD}" = 'efi' ] ; then
+    # does not work
+    ${SUDO} mkfs.fat -F 32 -n boot "${DEVICE}${PART_IDENTITYFIER}1"
+    # ${SUDO} parted -s -- set "${DEVICE}${PART_IDENTITYFIER}1" boot true
+    # ${SUDO} parted -s -- set "${DEVICE}${PART_IDENTITYFIER}1" esp true
+fi
 
 # flash boot things
 ${SUDO} dd if="${OUT_DIR}/boot0_sdcard_sun20iw1p1.bin" of="${DEVICE}" bs=8192 seek=16
@@ -86,8 +93,7 @@ ${SUDO} rm "${MNT}/lib/modules/${KERNEL_RELEASE}/source"
 
 ${SUDO} depmod -a -b "${MNT}" "${KERNEL_RELEASE}"
 echo '8723ds' >> 8723ds.conf
-${SUDO} cp 8723ds.conf "${MNT}/etc/modules-load.d/"
-rm 8723ds.conf
+${SUDO} mv 8723ds.conf "${MNT}/etc/modules-load.d/"
 
 # install U-Boot
 if [ "${BOOT_METHOD}" = 'script' ] ; then 
@@ -99,11 +105,24 @@ label default
         linux   ../Image
         append  earlycon=sbi console=ttyS0,115200n8 root=/dev/mmcblk0p2 rootwait cma=96M
 EOF
-    ${SUDO} cp extlinux.conf "${MNT}/boot/extlinux/extlinux.conf"
-    rm extlinux.conf
+    ${SUDO} mv extlinux.conf "${MNT}/boot/extlinux/extlinux.conf"
+elif [ "${BOOT_METHOD}" = 'efi' ] ; then
+    echo '###################################################'
+    echo '# run "bootctl --esp-path=/boot/ install" in chroot'
+    echo '###################################################'
+
+    ${SUDO} mkdir -p "${MNT}/boot/loader/entries"
+cat << EOF > arch.conf
+title	Arch Linux
+linux	/Image
+
+options	earlycon=sbi console=ttyS0,115200n8 root=/dev/mmcblk0p2 rootwait cma=96M ro
+EOF
+    ${SUDO} mv arch.conf "${MNT}/boot/loader/entries/arch.conf"
 fi
 
 # fstab
+# FIXME for EFI vfat is used instead of ext2
 cat << EOF > fstab
 # <device>    <dir>        <type>        <options>            <dump> <pass>
 LABEL=boot    /boot        ext2          rw,defaults,noatime  0      1
@@ -114,8 +133,7 @@ rm fstab
 
 # set hostname
 echo 'licheerv' > hostname
-${SUDO} cp hostname "${MNT}/etc/"
-rm hostname
+${SUDO} mv hostname "${MNT}/etc/"
 
 # # updating ...
 # ${SUDO} arch-chroot ${MNT} pacman -Syu

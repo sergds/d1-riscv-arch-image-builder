@@ -56,7 +56,7 @@ if [ ! -f "${OUT_DIR}/u-boot.toc1" ] ; then
     DIR='opensbi'
     clean_dir ${DIR}
 
-    git clone "${SOURCE_OPENSBI}" -b d1-wip
+    git clone --depth 1 "${SOURCE_OPENSBI}" -b d1-wip
     cd ${DIR}
     make CROSS_COMPILE="${CROSS_COMPILE}" PLATFORM=generic FW_PIC=y FW_OPTIONS=0x2
     cd ..
