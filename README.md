@@ -4,6 +4,8 @@ These scripts compile, copy, bake, unpack and flash a [ready](https://wiki.archl
 
 Special thanks to **smaeul** for all their work!
 
+Find a **precompiled image** under the [Actions](https://github.com/sehraf/riscv-arch-image-builder/actions) artifacts.
+
 ## Components
 - Boot0 based on https://github.com/smaeul/sun20i_d1_spl
 - OpenSBI based on https://github.com/smaeul/opensbi
