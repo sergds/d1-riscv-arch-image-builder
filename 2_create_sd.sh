@@ -37,7 +37,7 @@ DEVICE=${1}
 
 if [ "${USE_CHROOT}" != 0 ] ; then
     # check_deps for arch-chroot on non RISC-V host
-    for DEP in arch-install-scripts qemu-user-static-bin binfmt-qemu-static ; do
+    for DEP in arch-install-scripts qemu-user-static qemu-user-static-binfmt ; do
         check_deps ${DEP}
     done
 fi
@@ -62,8 +62,8 @@ ${SUDO} mkfs.ext2 -F -L boot "${DEVICE}${PART_IDENTITYFIER}1"
 ${SUDO} mkfs.ext4 -F -L root "${DEVICE}${PART_IDENTITYFIER}2"
 
 if [ "${BOOT_METHOD}" = 'efi' ] ; then
-    # does not work
     ${SUDO} mkfs.fat -F 32 -n boot "${DEVICE}${PART_IDENTITYFIER}1"
+    # does not work
     # ${SUDO} parted -s -- set "${DEVICE}${PART_IDENTITYFIER}1" boot true
     # ${SUDO} parted -s -- set "${DEVICE}${PART_IDENTITYFIER}1" esp true
 fi
