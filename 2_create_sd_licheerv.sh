@@ -37,7 +37,7 @@ DEVICE=${1}
 
 if [ "${USE_CHROOT}" != 0 ] ; then
     # check_deps for arch-chroot on non RISC-V host
-    for DEP in arch-install-scripts qemu-user-static binfmt-qemu-static ; do
+    for DEP in arch-install-scripts qemu-user-static qemu-user-static-binfmt ; do
         check_deps ${DEP}
     done
 fi
