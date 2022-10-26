@@ -21,10 +21,9 @@ export OUT_DIR="${PWD}/output"
 export SUDO='sudo'
 
 # use arch-chroot?
-#export USE_CHROOT=0
 export USE_CHROOT=1
 
-# use extlinux ('extlinux') or boot.scr ('script') for loading the kernel?
+# use extlinux ('extlinux'), boot.scr ('script') or EFI 'efi' (broken) for loading the kernel?
 export BOOT_METHOD='extlinux'
 
 # pinned commits (no notice when things change)
