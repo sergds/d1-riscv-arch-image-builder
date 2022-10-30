@@ -17,7 +17,11 @@ Also have a look at the forks that have emerged over time or similar projects li
 - RootFS based on https://archriscv.felixc.at (root password is `sifive`)
 
 ## How to build
+
+## How to build
 1. Install requirements: `pacman -Sy riscv64-linux-gnu-gcc swig cpio python3 python-setuptools base-devel bc`
+   1. If you want to `chroot` into the RISC-V image, you also need `arch-install-scripts qemu-user-static qemu-user-static-binfmt`
+1. Edit `consts.sh` to your needs. For example, you may want to select a [different DTB](https://github.com/sehraf/riscv-arch-image-builder/blob/5c450da98d578617781ae13f9d2b0850a61b21c4/consts.sh#L22) for a different board variant.
 1. Run `1_compile.sh` which compiles everything into the `output` folder.
 1. Run `2_create_sd.sh /dev/<device>` to flash everything on the SD card.
 1. Configure your Archlinux :rocket:
@@ -37,6 +41,9 @@ The second script uses `sudo` for root access. Like any random script from a ran
 Things are rebuild whenever the corresponding `output/<file>` is missing. For example, the kernel is rebuilt when there is no `Image` file.
 
 # Status
+## 13.09.2022
+- kernel is back at 5.18-rc1 due to being more reliable
+
 ## 14.06.2022
 - kernel updated to 5.19-rc1
 - added initramfs support (untested)
