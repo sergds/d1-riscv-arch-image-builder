@@ -12,6 +12,15 @@ export ROOT_FS_DL="https://archriscv.felixc.at/images/${ROOT_FS}"
 # select 'arch', 'nezha_defconfig'
 export KERNEL='nezha_defconfig'
 
+# Device Tree:
+# In the current pinned U-Boot Commit the following device trees are available 
+# for the D1:
+# u-boot/arch/riscv/dts/sun20i-d1-lichee-rv-86-panel.dtb
+# u-boot/arch/riscv/dts/sun20i-d1-lichee-rv-dock.dtb
+# u-boot/arch/riscv/dts/sun20i-d1-lichee-rv.dtb
+# u-boot/arch/riscv/dts/sun20i-d1-nezha.dtb
+export DTB=u-boot/arch/riscv/dts/sun20i-d1-nezha.dtb
+
 # folder to mount rootfs
 export MNT='mnt'
 # folder to store compiled artifacts
@@ -52,3 +61,4 @@ check_deps() {
         exit 1
     fi
 }
+

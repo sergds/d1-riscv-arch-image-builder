@@ -85,7 +85,7 @@ if [ ! -f "${OUT_DIR}/u-boot.toc1" ] ; then
 file = opensbi/build/platform/generic/firmware/fw_dynamic.bin
 addr = 0x40000000
 [dtb]
-file = u-boot/arch/riscv/dts/sun20i-d1-lichee-rv-dock.dtb
+file = ${DTB}
 addr = 0x44000000
 [u-boot]
 file = u-boot/u-boot-nodtb.bin
@@ -300,3 +300,4 @@ if [ ! -f "${OUT_DIR}/8723ds.ko" ] ; then
     cd ..
     cp ${DIR}/8723ds.ko "${OUT_DIR}"
 fi
+
