@@ -43,7 +43,7 @@ if [ "${USE_CHROOT}" != 0 ] ; then
 fi
 check_sd_card_is_block_device "${DEVICE}"
 check_root_fs
-for FILE in 8723ds.ko boot0_sdcard_sun20iw1p1.bin boot.scr Image.gz Image nezha_u-boot.toc1 ; do
+for FILE in 8723ds.ko boot0_sdcard_sun20iw1p1.bin boot.scr Image.gz Image u-boot.toc1 ; do
     check_required_file "${OUT_DIR}/${FILE}"
 done
 
@@ -70,7 +70,7 @@ fi
 
 # flash boot things
 ${SUDO} dd if="${OUT_DIR}/boot0_sdcard_sun20iw1p1.bin" of="${DEVICE}" bs=8192 seek=16
-${SUDO} dd if="${OUT_DIR}/nezha_u-boot.toc1" of="${DEVICE}" bs=512 seek=32800
+${SUDO} dd if="${OUT_DIR}/u-boot.toc1" of="${DEVICE}" bs=512 seek=32800
 
 # mount it
 mkdir -p "${MNT}"
@@ -157,3 +157,4 @@ fi
 
 ${SUDO} umount -R "${MNT}"
 exit 0
+

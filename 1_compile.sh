@@ -51,8 +51,7 @@ if [ ! -f "${OUT_DIR}/boot0_sdcard_sun20iw1p1.bin" ] ; then
     cp ${DIR}/nboot/boot0_sdcard_sun20iw1p1.bin "${OUT_DIR}"
 fi
 
-#if [ ! -f "${OUT_DIR}/u-boot.toc1" ] ; then
-if [ ! -f "${OUT_DIR}/licheerv_u-boot.toc1" ] || [ ! -f "${OUT_DIR}/nezha_u-boot.toc1" ] ; then
+if [ ! -f "${OUT_DIR}/u-boot.toc1" ] ; then
     # build OpenSBI
     DIR='opensbi'
     clean_dir ${DIR}
@@ -86,31 +85,14 @@ if [ ! -f "${OUT_DIR}/licheerv_u-boot.toc1" ] || [ ! -f "${OUT_DIR}/nezha_u-boot
 file = opensbi/build/platform/generic/firmware/fw_dynamic.bin
 addr = 0x40000000
 [dtb]
-file = u-boot/arch/riscv/dts/sun20i-d1-lichee-rv-dock.dtb
+file = ${DTB}
 addr = 0x44000000
 [u-boot]
 file = u-boot/u-boot-nodtb.bin
 addr = 0x4a000000
 EOF
-    ${DIR}/tools/mkimage -T sunxi_toc1 -d licheerv_toc1.cfg licheerv_u-boot.toc1
-    cp licheerv_u-boot.toc1 "${OUT_DIR}"
-
-
-    cat << EOF > nezha_toc1.cfg
-[opensbi]
-file = opensbi/build/platform/generic/firmware/fw_dynamic.bin
-addr = 0x40000000
-[dtb]
-file = u-boot/arch/riscv/dts/sun20i-d1-nezha.dtb
-addr = 0x44000000
-[u-boot]
-file = u-boot/u-boot-nodtb.bin
-addr = 0x4a000000
-EOF
-    ${DIR}/tools/mkimage -T sunxi_toc1 -d nezha_toc1.cfg nezha_u-boot.toc1
-    cp nezha_u-boot.toc1 "${OUT_DIR}"
-
-
+    ${DIR}/tools/mkimage -T sunxi_toc1 -d licheerv_toc1.cfg u-boot.toc1
+    cp u-boot.toc1 "${OUT_DIR}"
 fi
 
 if [ ! -f "${OUT_DIR}/boot.scr" ] ; then
@@ -318,3 +300,4 @@ if [ ! -f "${OUT_DIR}/8723ds.ko" ] ; then
     cd ..
     cp ${DIR}/8723ds.ko "${OUT_DIR}"
 fi
+
