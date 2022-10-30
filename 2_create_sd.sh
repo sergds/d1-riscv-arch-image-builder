@@ -52,7 +52,7 @@ echo "Formatting ${DEVICE}, this will REMOVE EVERYTHING on it!"
 printf "Continue? (y/N): "
 read -r  confirm && [ "${confirm}" = "y" ] || [ "${confirm}" = "Y" ] || exit 1
 
-${SUDO} dd if=/dev/zero of="${DEVICE}" bs=1M count=200
+${SUDO} dd if=/dev/zero of="${DEVICE}" bs=1M count=40
 ${SUDO} parted -s -a optimal -- "${DEVICE}" mklabel gpt
 ${SUDO} parted -s -a optimal -- "${DEVICE}" mkpart primary fat32 40MiB 1024MiB
 ${SUDO} parted -s -a optimal -- "${DEVICE}" mkpart primary ext4 1064MiB 100%
@@ -84,6 +84,7 @@ ${SUDO} tar -xv --zstd -f "${ROOT_FS}" -C "${MNT}"
 # install kernel and modules
 ${SUDO} cp "${OUT_DIR}/Image.gz" "${OUT_DIR}/Image" "${MNT}/boot/"
 cd build/linux-build
+KERNEL_RELEASE=$(make ARCH="${ARCH}" -s kernelversion)
 ${SUDO} make ARCH="${ARCH}" INSTALL_MOD_PATH="../../${MNT}" KERNELRELEASE="${KERNEL_RELEASE}" modules_install
 cd ../..
 ${SUDO} install -D -p -m 644 "${OUT_DIR}/8723ds.ko" "${MNT}/lib/modules/${KERNEL_RELEASE}/kernel/drivers/net/wireless/8723ds.ko"

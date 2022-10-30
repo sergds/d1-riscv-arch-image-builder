@@ -13,13 +13,13 @@ export ROOT_FS_DL="https://archriscv.felixc.at/images/${ROOT_FS}"
 export KERNEL='nezha_defconfig'
 
 # Device Tree:
-# In the current pinned U-Boot Commit the following device trees are available 
+# In the current pinned U-Boot Commit the following device trees are available
 # for the D1:
 # u-boot/arch/riscv/dts/sun20i-d1-lichee-rv-86-panel.dtb
 # u-boot/arch/riscv/dts/sun20i-d1-lichee-rv-dock.dtb
 # u-boot/arch/riscv/dts/sun20i-d1-lichee-rv.dtb
 # u-boot/arch/riscv/dts/sun20i-d1-nezha.dtb
-export DTB=u-boot/arch/riscv/dts/sun20i-d1-nezha.dtb
+export DTB=u-boot/arch/riscv/dts/sun20i-d1-lichee-rv-dock.dtb
 
 # folder to mount rootfs
 export MNT='mnt'
@@ -50,7 +50,6 @@ export COMMIT_UBOOT='afc07cec423f17ebb4448a19435292ddacf19c9b' # equals d1-wip (
 # export KERNEL_TAG='d1/wip'
 export COMMIT_KERNEL='cc63db754b218d3ef9b529a82e04b66252e9bca1' # equals tag d1-wip-v5.18-rc1
 export KERNEL_TAG='d1-wip-v5.18-rc1'
-export KERNEL_RELEASE='5.18.0-AllWinnerD1-Smaeul' # must match commit!
 # use this (set to something != 0) to override the check
 export IGNORE_COMMITS=0
 export DEBUG='n'
