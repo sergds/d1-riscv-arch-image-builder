@@ -66,9 +66,8 @@ if [ ! -f "${OUT_DIR}/u-boot.toc1" ] ; then
     DIR='u-boot'
     clean_dir ${DIR}
 
-    git clone "${SOURCE_UBOOT}"
+    git clone --depth 1 "${SOURCE_UBOOT}" -b "${TAG_UBOOT}"
     cd ${DIR}
-    git checkout d1-wip
     pin_commit "${COMMIT_UBOOT}"
     # patch for binutils 2.38
     git apply ../../uboot-makefile.patch
@@ -126,7 +125,7 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ] ; then
     clean_dir ${DIR}-build
 
     # try not to clone complete linux source tree here!
-    git clone --depth 1 "${SOURCE_KERNEL}" -b "${KERNEL_TAG}"
+    git clone --depth 1 "${SOURCE_KERNEL}" -b "${TAG_KERNEL}"
     cd ${DIR}
     pin_commit "${COMMIT_KERNEL}"
     # fix kernel version

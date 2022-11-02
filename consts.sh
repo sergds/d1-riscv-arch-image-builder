@@ -43,13 +43,14 @@ export SOURCE_KERNEL='https://github.com/smaeul/linux'
 # https://github.com/karabek/xradio
 
 export COMMIT_BOOT0='882671fcf53137aaafc3a94fa32e682cb7b921f1' # from 14.06.2022
-export COMMIT_UBOOT='afc07cec423f17ebb4448a19435292ddacf19c9b' # equals d1-wip (28.05.2022)
+export COMMIT_UBOOT='afc07cec423f17ebb4448a19435292ddacf19c9b' # equals d1-2022-05-26
+export TAG_UBOOT='d1-2022-05-26'
 # export COMMIT_KERNEL='fe178cf0153d98b71cb01a46c8cc050826a17e77' # equals riscv/d1-wip head
 # export KERNEL_TAG='riscv/d1-wip'
 # export COMMIT_KERNEL='673a7faa146862c6ba7b0253a5ff22b07de0e0a9' # equals d1/wip head (12.08.2022)
 # export KERNEL_TAG='d1/wip'
 export COMMIT_KERNEL='cc63db754b218d3ef9b529a82e04b66252e9bca1' # equals tag d1-wip-v5.18-rc1
-export KERNEL_TAG='d1-wip-v5.18-rc1'
+export TAG_KERNEL='d1-wip-v5.18-rc1'
 # use this (set to something != 0) to override the check
 export IGNORE_COMMITS=0
 export DEBUG='n'
