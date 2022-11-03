@@ -42,7 +42,9 @@ Things are rebuild whenever the corresponding `output/<file>` is missing. For ex
 
 # Status
 ## 3.11.2022
-- update U-Boot and remove boot0 (handled by [U-Boot](https://github.com/smaeul/u-boot/releases/tag/d1-2022-10-31))
+- updated U-Boot and remove boot0 (handled by [U-Boot](https://github.com/smaeul/u-boot/releases/tag/d1-2022-10-31))
+- updated kernel to 6.1.0-rc3
+    - **THIS BRAKES BUILT-IN WIFI**
 
 ## 13.09.2022
 - kernel is back at 5.18-rc1 due to being more reliable
