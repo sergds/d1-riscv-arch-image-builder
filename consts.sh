@@ -36,15 +36,15 @@ export USE_CHROOT=1
 export BOOT_METHOD='extlinux'
 
 # pinned commits (no notice when things change)
-export SOURCE_BOOT0='https://github.com/smaeul/sun20i_d1_spl'
 export SOURCE_OPENSBI='https://github.com/smaeul/opensbi'
 export SOURCE_UBOOT='https://github.com/smaeul/u-boot'
 export SOURCE_KERNEL='https://github.com/smaeul/linux'
 # https://github.com/karabek/xradio
 
-export COMMIT_BOOT0='882671fcf53137aaafc3a94fa32e682cb7b921f1' # from 14.06.2022
-export COMMIT_UBOOT='afc07cec423f17ebb4448a19435292ddacf19c9b' # equals d1-2022-05-26
-export TAG_UBOOT='d1-2022-05-26'
+# export COMMIT_UBOOT='afc07cec423f17ebb4448a19435292ddacf19c9b' # equals d1-2022-05-26
+# export TAG_UBOOT='d1-2022-05-26'
+export COMMIT_UBOOT='329e94f16ff84f9cf9341f8dfdff7af1b1e6ee9a' # equals d1-2022-10-31
+export TAG_UBOOT='d1-2022-10-31'
 # export COMMIT_KERNEL='fe178cf0153d98b71cb01a46c8cc050826a17e77' # equals riscv/d1-wip head
 # export KERNEL_TAG='riscv/d1-wip'
 # export COMMIT_KERNEL='673a7faa146862c6ba7b0253a5ff22b07de0e0a9' # equals d1/wip head (12.08.2022)

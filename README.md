@@ -41,6 +41,9 @@ The second script uses `sudo` for root access. Like any random script from a ran
 Things are rebuild whenever the corresponding `output/<file>` is missing. For example, the kernel is rebuilt when there is no `Image` file.
 
 # Status
+## 3.11.2022
+- update U-Boot and remove boot0 (handled by [U-Boot](https://github.com/smaeul/u-boot/releases/tag/d1-2022-10-31))
+
 ## 13.09.2022
 - kernel is back at 5.18-rc1 due to being more reliable
 
