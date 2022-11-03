@@ -6,7 +6,6 @@ ADD 1_compile.sh 1_compile.sh
 ADD 2_create_sd.sh 2_create_sd.sh
 ADD consts.sh consts.sh
 ADD licheerv_linux_defconfig licheerv_linux_defconfig
-ADD uboot-makefile.patch uboot-makefile.patch
 ADD upload_kernel.sh upload_kernel.sh
 # ADD mirrorlist /etc/pacman.d/mirrorlist
 
