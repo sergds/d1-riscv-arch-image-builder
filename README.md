@@ -41,6 +41,9 @@ The second script uses `sudo` for root access. Like any random script from a ran
 Things are rebuild whenever the corresponding `output/<file>` is missing. For example, the kernel is rebuilt when there is no `Image` file.
 
 # Status
+## 4.11.2022
+- WiFi is working again
+
 ## 3.11.2022
 - updated U-Boot and remove boot0 (handled by [U-Boot](https://github.com/smaeul/u-boot/releases/tag/d1-2022-10-31))
 - updated kernel to 6.1.0-rc3

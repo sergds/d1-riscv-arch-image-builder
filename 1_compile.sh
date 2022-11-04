@@ -239,16 +239,13 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ]; then
 fi
 
 if [ ! -f "${OUT_DIR}/8723ds.ko" ]; then
-    # # build WiFi driver
-    # DIR='rtl8723ds'
-    # clean_dir ${DIR}
+    # build WiFi driver
+    DIR='rtl8723ds'
+    clean_dir ${DIR}
 
-    # git clone "${SOURCE_RTL8723}"
-    # cd ${DIR}
-    # make CROSS_COMPILE="${CROSS_COMPILE}" ARCH="${ARCH}" KSRC=../linux-build -j "${NPROC}" modules || true
-    # cd ..
-    # cp ${DIR}/8723ds.ko "${OUT_DIR}"
-
-    echo 'WARNING: WiFi driver is not available, faking it!'
-    touch "${OUT_DIR}/8723ds.ko"
+    git clone "${SOURCE_RTL8723}"
+    cd ${DIR}
+    make CROSS_COMPILE="${CROSS_COMPILE}" ARCH="${ARCH}" KSRC=../linux-build -j "${NPROC}" modules || true
+    cd ..
+    cp ${DIR}/8723ds.ko "${OUT_DIR}"
 fi
