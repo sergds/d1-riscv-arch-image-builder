@@ -48,9 +48,11 @@ for FILE in 8723ds.ko u-boot-sunxi-with-spl.bin Image.gz Image; do
 done
 
 # format disk
-echo "Formatting ${DEVICE}, this will REMOVE EVERYTHING on it!"
-printf "Continue? (y/N): "
-read -r confirm && [ "${confirm}" = "y" ] || [ "${confirm}" = "Y" ] || exit 1
+if [ -z "${CI_BUILD}" ]; then
+    echo "Formatting ${DEVICE}, this will REMOVE EVERYTHING on it!"
+    printf "Continue? (y/N): "
+    read -r confirm && [ "${confirm}" = "y" ] || [ "${confirm}" = "Y" ] || exit 1
+fi
 
 ${SUDO} dd if=/dev/zero of="${DEVICE}" bs=1M count=40
 ${SUDO} parted -s -a optimal -- "${DEVICE}" mklabel gpt

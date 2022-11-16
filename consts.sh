@@ -59,9 +59,12 @@ export IGNORE_COMMITS=0
 export DEBUG='n'
 
 check_deps() {
-    if ! pacman -Qi "${1}" > /dev/null ; then
+    if ! pacman -Qi "${1}" >/dev/null; then
         echo "Please install '${1}'"
         exit 1
     fi
 }
 
+if [ -n "${CI_BUILD}" ]; then
+    export USE_CHROOT=0
+fi
