@@ -6,7 +6,7 @@ NPROC="$(nproc)"
 export PWD
 export NPROC
 
-export ROOT_FS='archriscv-20210601.tar.zst'
+export ROOT_FS='archriscv-20220727.tar.zst'
 export ROOT_FS_DL="https://archriscv.felixc.at/images/${ROOT_FS}"
 
 # select 'arch', 'nezha_defconfig'
