@@ -5,7 +5,7 @@ set -e
 
 . ./consts.sh
 
-if [ -z "$1" ] ; then
+if [ -z "$1" ]; then
     echo "Usage: $0 user@host"
     exit 1
 fi
@@ -14,12 +14,12 @@ SSH_TARGET="$1"
 
 SSH="ssh $SSH_TARGET"
 
-if [ ! -f output/Image ] || [ ! -f output/8723ds.ko ] ; then
+if [ ! -f output/Image ] || [ ! -f output/8723ds.ko ]; then
     echo "run ./1_compile.sh first"
     exit 1
 fi
 MODULES="/usr/lib/modules/$KERNEL_RELEASE"
-if [ ! -d "$MNT/$MODULES" ] ; then
+if [ ! -d "$MNT/$MODULES" ]; then
     echo "mount the flashed SD card to $MNT"
     exit 1
 fi
@@ -69,7 +69,7 @@ EOF"
 
 # run install script
 echo "running install.sh on ${SSH_TARGET}..."
-ssh -t $SSH_TARGET "cd $tmpfile; pwd; sudo sh ./install.sh"
+ssh -t "$SSH_TARGET" "cd $tmpfile; pwd; sudo sh ./install.sh"
 
 # clean up
 $SSH rm -r "$tmpfile"

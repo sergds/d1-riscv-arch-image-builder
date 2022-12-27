@@ -18,6 +18,7 @@ export KERNEL='nezha_defconfig'
 # u-boot/arch/riscv/dts/sun20i-d1-lichee-rv-86-panel.dtb
 # u-boot/arch/riscv/dts/sun20i-d1-lichee-rv-dock.dtb
 # u-boot/arch/riscv/dts/sun20i-d1-lichee-rv.dtb
+# u-boot/arch/riscv/dts/sun20i-d1-mangopi-mq-pro.dts
 # u-boot/arch/riscv/dts/sun20i-d1-nezha.dtb
 export DTB=u-boot/arch/riscv/dts/sun20i-d1-lichee-rv-dock.dtb
 
