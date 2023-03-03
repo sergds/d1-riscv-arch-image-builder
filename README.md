@@ -8,6 +8,11 @@ Find a **precompiled image** under the [Actions](https://github.com/sehraf/riscv
 
 Also have a look at the forks that have emerged over time or similar projects like a [make file based approch](https://github.com/hyx0329/riscv-archlinux-d1).
 
+## Starfive Vision 2
+There are multiple sources for an Archlinux image:
+- https://forum.rvspace.org/t/arch-linux-image-for-visionfive-2/1459
+- https://github.com/thefossguy/archlinux-visionfive2
+
 ## Components
 - Boot0 based on https://github.com/smaeul/sun20i_d1_spl
 - OpenSBI based on https://github.com/smaeul/opensbi
