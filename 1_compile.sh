@@ -45,8 +45,13 @@ if [ ! -f "${OUT_DIR}/fw_dynamic.bin" ]; then
     # build OpenSBI
     DIR='opensbi'
     clean_dir ${DIR}
+    clean_dir ${DIR}.tar.xz
 
-    git clone --depth 1 "${SOURCE_OPENSBI}" -b d1-wip
+    curl -O -L ${SOURCE_OPENSBI}
+    tar -xf "v${VERSION_OPENSBI}.tar.gz"
+    mv "opensbi-${VERSION_OPENSBI}" ${DIR}
+    rm "v${VERSION_OPENSBI}.tar.gz"
+
     cd ${DIR}
     make CROSS_COMPILE="${CROSS_COMPILE}" PLATFORM=generic FW_PIC=y FW_OPTIONS=0x2
     cd ..
@@ -93,13 +98,16 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ]; then
     'nezha_defconfig')
         # Nezha defconfig
         echo "CONFIG_LOCALVERSION_AUTO=n" >>${DIR}/arch/riscv/configs/defconfig
+        # enable HDMI ?????????
+        echo 'CONFIG_DRM_SUN4I_HDMI=m' >>${DIR}/arch/riscv/configs/defconfig
+        echo 'CONFIG_DRM_SUN4I_HDMI_CEC=m' >>${DIR}/arch/riscv/configs/defconfig
         # enable WiFi
         echo 'CONFIG_WIRELESS=y' >>${DIR}/arch/riscv/configs/defconfig
         echo 'CONFIG_CFG80211=m' >>${DIR}/arch/riscv/configs/defconfig
         # enable /proc/config.gz
         echo 'CONFIG_IKCONFIG=m' >>${DIR}/arch/riscv/configs/defconfig
         echo 'CONFIG_IKCONFIG_PROC=y' >>${DIR}/arch/riscv/configs/defconfig
-        # There is no LAN. so let there be USB-LAN
+        # There is no LAN, so let there be USB-LAN
         echo 'CONFIG_USB_NET_DRIVERS=m' >>${DIR}/arch/riscv/configs/defconfig
         echo 'CONFIG_USB_CATC=m' >>${DIR}/arch/riscv/configs/defconfig
         echo 'CONFIG_USB_KAWETH=m' >>${DIR}/arch/riscv/configs/defconfig
@@ -150,7 +158,7 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ]; then
         # enable swap
         echo 'CONFIG_SWAP=y' >>${DIR}/arch/riscv/configs/defconfig
         echo 'CONFIG_ZSWAP=y' >>${DIR}/arch/riscv/configs/defconfig
-        #enable Cedrus VPU Drivers
+        # enable Cedrus VPU Drivers
         echo 'CONFIG_MEDIA_SUPPORT=y' >>${DIR}/arch/riscv/configs/defconfig
         echo 'CONFIG_MEDIA_CONTROLLER=y' >>${DIR}/arch/riscv/configs/defconfig
         echo 'CONFIG_MEDIA_CONTROLLER_REQUEST_API=y' >>${DIR}/arch/riscv/configs/defconfig

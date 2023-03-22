@@ -63,13 +63,6 @@ PART_IDENTITYFIER=$(probe_partition_separator "${DEVICE}")
 ${SUDO} mkfs.ext2 -F -L boot "${DEVICE}${PART_IDENTITYFIER}1"
 ${SUDO} mkfs.ext4 -F -L root "${DEVICE}${PART_IDENTITYFIER}2"
 
-if [ "${BOOT_METHOD}" = 'efi' ]; then
-    ${SUDO} mkfs.fat -F 32 -n boot "${DEVICE}${PART_IDENTITYFIER}1"
-    # does not work
-    # ${SUDO} parted -s -- set "${DEVICE}${PART_IDENTITYFIER}1" boot true
-    # ${SUDO} parted -s -- set "${DEVICE}${PART_IDENTITYFIER}1" esp true
-fi
-
 # flash boot things
 ${SUDO} dd if="${OUT_DIR}/u-boot-sunxi-with-spl.bin" of="${DEVICE}" bs=1024 seek=128
 
@@ -104,23 +97,10 @@ elif [ "${BOOT_METHOD}" = 'extlinux' ]; then
     ${SUDO} mkdir -p "${MNT}/boot/extlinux"
     cat <<EOF >extlinux.conf
 label default
-        linux   ../Image
+        linux   /Image
         append  earlycon=sbi console=ttyS0,115200n8 root=/dev/mmcblk0p2 rootwait cma=96M
 EOF
     ${SUDO} mv extlinux.conf "${MNT}/boot/extlinux/extlinux.conf"
-elif [ "${BOOT_METHOD}" = 'efi' ]; then
-    echo '###################################################'
-    echo '# run "bootctl --esp-path=/boot/ install" in chroot'
-    echo '###################################################'
-
-    ${SUDO} mkdir -p "${MNT}/boot/loader/entries"
-    cat <<EOF >arch.conf
-title	Arch Linux
-linux	/Image
-
-options	earlycon=sbi console=ttyS0,115200n8 root=/dev/mmcblk0p2 rootwait cma=96M ro
-EOF
-    ${SUDO} mv arch.conf "${MNT}/boot/loader/entries/arch.conf"
 fi
 
 # fstab

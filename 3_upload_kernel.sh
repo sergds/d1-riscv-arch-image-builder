@@ -18,6 +18,11 @@ if [ ! -f output/Image ] || [ ! -f output/8723ds.ko ]; then
     echo "run ./1_compile.sh first"
     exit 1
 fi
+
+# get kernel release
+cd build/linux-build
+KERNEL_RELEASE=$(make ARCH="${ARCH}" -s kernelversion)
+cd ../..
 MODULES="/usr/lib/modules/$KERNEL_RELEASE"
 if [ ! -d "$MNT/$MODULES" ]; then
     echo "mount the flashed SD card to $MNT"

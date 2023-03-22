@@ -33,16 +33,18 @@ export SUDO='sudo'
 # use arch-chroot?
 export USE_CHROOT=1
 
-# use extlinux ('extlinux'), boot.scr ('script') or EFI 'efi' (broken) for loading the kernel?
+# use extlinux ('extlinux') or boot.scr ('script') for loading the kernel?
 export BOOT_METHOD='extlinux'
 
-# pinned commits (no notice when things change)
-export SOURCE_OPENSBI='https://github.com/smaeul/opensbi'
+export VERSION_OPENSBI='1.2'
+
+export SOURCE_OPENSBI="https://github.com/riscv-software-src/opensbi/archive/refs/tags/v${VERSION_OPENSBI}.tar.gz"
 export SOURCE_UBOOT='https://github.com/smaeul/u-boot'
 export SOURCE_KERNEL='https://github.com/smaeul/linux'
 export SOURCE_RTL8723='https://github.com/lwfinger/rtl8723ds.git'
 # https://github.com/karabek/xradio
 
+# pinned commits (no notice when things change)
 # export COMMIT_UBOOT='afc07cec423f17ebb4448a19435292ddacf19c9b' # equals d1-2022-05-26
 # export TAG_UBOOT='d1-2022-05-26'
 export COMMIT_UBOOT='329e94f16ff84f9cf9341f8dfdff7af1b1e6ee9a' # equals d1-2022-10-31
