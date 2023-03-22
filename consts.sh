@@ -38,7 +38,7 @@ export BOOT_METHOD='extlinux'
 
 export VERSION_OPENSBI='1.2'
 
-export SOURCE_OPENSBI="https://github.com/riscv-software-src/opensbi/archive/refs/tags/v${VERSION_OPENSBI}.tar.gz"
+export SOURCE_OPENSBI="https://github.com/riscv-software-src/opensbi/releases/download/v${VERSION_OPENSBI}/opensbi-${VERSION_OPENSBI}-rv-bin.tar.xz"
 export SOURCE_UBOOT='https://github.com/smaeul/u-boot'
 export SOURCE_KERNEL='https://github.com/smaeul/linux'
 export SOURCE_RTL8723='https://github.com/lwfinger/rtl8723ds.git'

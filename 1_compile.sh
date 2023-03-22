@@ -48,14 +48,9 @@ if [ ! -f "${OUT_DIR}/fw_dynamic.bin" ]; then
     clean_dir ${DIR}.tar.xz
 
     curl -O -L ${SOURCE_OPENSBI}
-    tar -xf "v${VERSION_OPENSBI}.tar.gz"
-    mv "opensbi-${VERSION_OPENSBI}" ${DIR}
-    rm "v${VERSION_OPENSBI}.tar.gz"
-
-    cd ${DIR}
-    make CROSS_COMPILE="${CROSS_COMPILE}" PLATFORM=generic FW_PIC=y FW_OPTIONS=0x2
-    cd ..
-    cp ${DIR}/build/platform/generic/firmware/fw_dynamic.bin "${OUT_DIR}"
+    tar -xf "opensbi-${VERSION_OPENSBI}-rv-bin.tar.xz"
+    rm "opensbi-${VERSION_OPENSBI}-rv-bin.tar.xz"
+    cp "opensbi-${VERSION_OPENSBI}-rv-bin/share/opensbi/lp64/generic/firmware/fw_dynamic.bin" "${OUT_DIR}"
 fi
 
 if [ ! -f "${OUT_DIR}/u-boot-sunxi-with-spl.bin" ]; then
