@@ -95,23 +95,21 @@ if [ "${BOOT_METHOD}" = 'script' ]; then
     ${SUDO} cp "${OUT_DIR}/boot.scr" "${MNT}/boot/"
 elif [ "${BOOT_METHOD}" = 'extlinux' ]; then
     ${SUDO} mkdir -p "${MNT}/boot/extlinux"
-    cat <<EOF >extlinux.conf
-label default
+    (
+        echo "label default
         linux   /Image
-        append  earlycon=sbi console=ttyS0,115200n8 root=/dev/mmcblk0p2 rootwait cma=96M
-EOF
+        append  earlycon=sbi console=ttyS0,115200n8 root=/dev/mmcblk0p2 rootwait cma=96M"
+    ) >extlinux.conf
     ${SUDO} mv extlinux.conf "${MNT}/boot/extlinux/extlinux.conf"
 fi
 
 # fstab
-# FIXME for EFI vfat is used instead of ext2
-cat <<EOF >fstab
-# <device>    <dir>        <type>        <options>            <dump> <pass>
+(
+    echo '# <device>    <dir>        <type>        <options>            <dump> <pass>
 LABEL=boot    /boot        ext2          rw,defaults,noatime  0      1
-LABEL=root    /            ext4          rw,defaults,noatime  0      2
-EOF
-${SUDO} cp fstab "${MNT}/etc/fstab"
-rm fstab
+LABEL=root    /            ext4          rw,defaults,noatime  0      2'
+) >fstab
+${SUDO} mv fstab "${MNT}/etc/fstab"
 
 # set hostname
 echo 'licheerv' >hostname
