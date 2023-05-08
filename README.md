@@ -19,7 +19,7 @@ There are multiple sources for an Archlinux image:
 - U-Boot based on https://github.com/smaeul/u-boot.git
 - Kernel based on https://github.com/smaeul/linux
 - WiFi driver (rtl8723ds) based on https://github.com/lwfinger/rtl8723ds
-- RootFS based on https://archriscv.felixc.at (root password is `sifive`)
+- RootFS based on https://archriscv.felixc.at (root password is ~~`sifive`~~ `archriscv`)
 
 ## How to build
 

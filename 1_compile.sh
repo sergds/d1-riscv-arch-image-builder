@@ -23,6 +23,7 @@ pin_commit() {
 }
 
 patch_config() {
+    # must be called when inside the `linux` dir
     key="$1"
     val="$2"
 
@@ -30,7 +31,27 @@ patch_config() {
         exit 1
     fi
 
-    echo "CONFIG_${key}=${val}" >>linux-build/.config
+    case "$val" in
+    'y')
+        _OP='--enable'
+        ;;
+    'n')
+        _OP='--disable'
+        ;;
+    'm')
+        _OP='--module'
+        ;;
+    *)
+        echo "Unknown kernel option value '$KERNEL'"
+        exit 1
+        ;;
+    esac
+
+    if [ -z "$_OP" ]; then
+        exit 1
+    fi
+
+    ./scripts/config --file "../${DIR}-build/.config" "$_OP" "$key"
 }
 
 for DEP in riscv64-linux-gnu-gcc swig cpio; do
@@ -82,151 +103,146 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ]; then
     pin_commit "${COMMIT_KERNEL}"
     # fix kernel version
     touch .scmversion
-    cd ..
-
-    # LicheeRV defconfig
-    # mkdir -p linux-build/arch/riscv/configs
-    # cp ../licheerv_linux_defconfig linux-build/arch/riscv/configs/licheerv_defconfig
-    # make ARCH=${ARCH} -C linux O=../linux-build licheerv_defconfig
 
     case "$KERNEL" in
-    'nezha_defconfig')
-        # Nezha defconfig
-        echo "CONFIG_LOCALVERSION_AUTO=n" >>${DIR}/arch/riscv/configs/defconfig
-        # enable HDMI ?????????
-        echo 'CONFIG_DRM_SUN4I_HDMI=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_DRM_SUN4I_HDMI_CEC=m' >>${DIR}/arch/riscv/configs/defconfig
+    'defconfig')
+        # generate default config
+        make ARCH="${ARCH}" O=../linux-build defconfig
+
+        # patch necessary options
+        # patch_config LOCALVERSION_AUTO n #### not necessary with a release kernel
+
         # enable WiFi
-        echo 'CONFIG_WIRELESS=y' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_CFG80211=m' >>${DIR}/arch/riscv/configs/defconfig
-        # enable /proc/config.gz
-        echo 'CONFIG_IKCONFIG=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_IKCONFIG_PROC=y' >>${DIR}/arch/riscv/configs/defconfig
+        patch_config CFG80211 m
+
         # There is no LAN, so let there be USB-LAN
-        echo 'CONFIG_USB_NET_DRIVERS=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_CATC=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_KAWETH=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_PEGASUS=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_RTL8150=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_RTL8152=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_LAN78XX=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_USBNET=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_AX8817X=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_AX88179_178A=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_CDCETHER=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_CDC_EEM=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_CDC_NCM=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_HUAWEI_CDC_NCM=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_CDC_MBIM=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_DM9601=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_SR9700=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_SR9800=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_SMSC75XX=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_SMSC95XX=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_GL620A=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_NET1080=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_PLUSB=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_MCS7830=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_RNDIS_HOST=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_CDC_SUBSET_ENABLE=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_CDC_SUBSET=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_ALI_M5632=y' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_AN2720=y' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_BELKIN=y' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_ARMLINUX=y' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_EPSON2888=y' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_KC2190=y' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_ZAURUS=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_CX82310_ETH=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_KALMIA=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_QMI_WWAN=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_INT51X1=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_IPHETH=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_SIERRA_NET=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_VL600=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_CH9200=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_NET_AQC111=m' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_USB_RTL8153_ECM=m' >>${DIR}/arch/riscv/configs/defconfig
+        patch_config USB_NET_DRIVERS m
+        patch_config USB_CATC m
+        patch_config USB_KAWETH m
+        patch_config USB_PEGASUS m
+        patch_config USB_RTL8150 m
+        patch_config USB_RTL8152 m
+        patch_config USB_LAN78XX m
+        patch_config USB_USBNET m
+        patch_config USB_NET_AX8817X m
+        patch_config USB_NET_AX88179_178A m
+        patch_config USB_NET_CDCETHER m
+        patch_config USB_NET_CDC_EEM m
+        patch_config USB_NET_CDC_NCM m
+        patch_config USB_NET_HUAWEI_CDC_NCM m
+        patch_config USB_NET_CDC_MBIM m
+        patch_config USB_NET_DM9601 m
+        patch_config USB_NET_SR9700 m
+        patch_config USB_NET_SR9800 m
+        patch_config USB_NET_SMSC75XX m
+        patch_config USB_NET_SMSC95XX m
+        patch_config USB_NET_GL620A m
+        patch_config USB_NET_NET1080 m
+        patch_config USB_NET_PLUSB m
+        patch_config USB_NET_MCS7830 m
+        patch_config USB_NET_RNDIS_HOST m
+        patch_config USB_NET_CDC_SUBSET_ENABLE m
+        patch_config USB_NET_CDC_SUBSET m
+        patch_config USB_ALI_M5632 y
+        patch_config USB_AN2720 y
+        patch_config USB_BELKIN y
+        patch_config USB_ARMLINUX y
+        patch_config USB_EPSON2888 y
+        patch_config USB_KC2190 y
+        patch_config USB_NET_ZAURUS m
+        patch_config USB_NET_CX82310_ETH m
+        patch_config USB_NET_KALMIA m
+        patch_config USB_NET_QMI_WWAN m
+        patch_config USB_NET_INT51X1 m
+        patch_config USB_IPHETH m
+        patch_config USB_SIERRA_NET m
+        patch_config USB_VL600 m
+        patch_config USB_NET_CH9200 m
+        patch_config USB_NET_AQC111 m
+        patch_config USB_RTL8153_ECM m
+
         # enable systemV IPC (needed by fakeroot during makepkg)
-        echo 'CONFIG_SYSVIPC=y' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_SYSVIPC_SYSCTL=y' >>${DIR}/arch/riscv/configs/defconfig
+        patch_config SYSVIPC y
+        patch_config SYSVIPC_SYSCTL y
+
         # enable swap
-        echo 'CONFIG_SWAP=y' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_ZSWAP=y' >>${DIR}/arch/riscv/configs/defconfig
+        patch_config SWAP y
+        patch_config ZSWAP y
+
         # enable Cedrus VPU Drivers
-        echo 'CONFIG_MEDIA_SUPPORT=y' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_MEDIA_CONTROLLER=y' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_MEDIA_CONTROLLER_REQUEST_API=y' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_V4L_MEM2MEM_DRIVERS=y' >>${DIR}/arch/riscv/configs/defconfig
-        echo 'CONFIG_VIDEO_SUNXI_CEDRUS=y' >>${DIR}/arch/riscv/configs/defconfig
+        patch_config MEDIA_SUPPORT y
+        patch_config MEDIA_CONTROLLER y
+        patch_config MEDIA_CONTROLLER_REQUEST_API y
+        patch_config V4L_MEM2MEM_DRIVERS y
+        patch_config VIDEO_SUNXI_CEDRUS y
+
         # enable binfmt_misc
-        echo 'CONFIG_BINFMT_MISC=y' >>${DIR}/arch/riscv/configs/defconfig
+        patch_config BINFMT_MISC y
+
         # debug options
         if [ $DEBUG = 'y' ]; then
-            echo 'CONFIG_DEBUG_INFO=y' >>${DIR}/arch/riscv/configs/defconfig
+            patch_config DEBUG_INFO y
         fi
 
-        make ARCH="${ARCH}" -C linux O=../linux-build defconfig
+        # default anything new
+        make ARCH="${ARCH}" O=../linux-build olddefconfig
+
         ;;
 
-        # Archlinux PR #1001 https://github.com/felixonmars/archriscv-packages/pull/1001 config
-        # https://github.com/felixonmars/archriscv-packages/blob/6689a4fdcd76dbbab777803493873f65e127e3e6/linux-nezha-git/config
-        # mkdir -p linux-build/arch/riscv/configs
-        # cp ../arch_nezha_git_config linux-build/arch/riscv/configs/licheerv_defconfig
-        # make ARCH=${ARCH} -C linux O=../linux-build licheerv_defconfig
-
     'arch')
-        # https://archriscv.felixc.at/repo/core/linux-5.17.3.arch1-1-riscv64.pkg.tar.zst
-        # setup linux-build
-        make ARCH="${ARCH}" -C linux O=../linux-build nezha_defconfig
-        # deploy config
-        cp ../../linux-5.17.3.arch1-1-riscv64.config linux-build/.config
-        # apply defaults
-        make CROSS_COMPILE="${CROSS_COMPILE}" ARCH="${ARCH}" -j "${NPROC}" -C linux-build olddefconfig
+        # # https://archriscv.felixc.at/repo/core/linux-5.17.3.arch1-1-riscv64.pkg.tar.zst
+        # # setup linux-build
+        # make ARCH="${ARCH}" -C linux O=../linux-build nezha_defconfig
+        # # deploy config
+        # cp ../../linux-5.17.3.arch1-1-riscv64.config linux-build/.config
+        # # apply defaults
+        # make CROSS_COMPILE="${CROSS_COMPILE}" ARCH="${ARCH}" -j "${NPROC}" -C ../linux-build olddefconfig
 
-        # patch config
-        patch_config ARCH_FLATMEM_ENABLE y
-        patch_config RISCV_DMA_NONCOHERENT y
-        patch_config RISCV_SBI_V01 y
-        patch_config HVC_RISCV_SBI y
-        patch_config SERIAL_EARLYCON_RISCV_SBI y
-        patch_config BROKEN_ON_SMP y
+        # # patch config
+        # patch_config ARCH_FLATMEM_ENABLE y
+        # patch_config RISCV_DMA_NONCOHERENT y
+        # patch_config RISCV_SBI_V01 y
+        # patch_config HVC_RISCV_SBI y
+        # patch_config SERIAL_EARLYCON_RISCV_SBI y
+        # patch_config BROKEN_ON_SMP y
 
-        patch_config ARCH_SUNXI y
-        patch_config ERRATA_THEAD y
+        # patch_config ARCH_SUNXI y
+        # patch_config ERRATA_THEAD y
 
-        patch_config DRM_SUN4I m
-        patch_config DRM_SUN6I_DSI m
-        patch_config DRM_SUN8I_DW_HDMI m
-        patch_config DRM_SUN8I_MIXER m
-        patch_config DRM_SUN4I_HDMI n
-        patch_config DRM_SUN4I_BACKEND n
+        # patch_config DRM_SUN4I m
+        # patch_config DRM_SUN6I_DSI m
+        # patch_config DRM_SUN8I_DW_HDMI m
+        # patch_config DRM_SUN8I_MIXER m
+        # patch_config DRM_SUN4I_HDMI n
+        # patch_config DRM_SUN4I_BACKEND n
 
-        patch_config CRYPTO_DEV_SUN8I_CE y
-        patch_config CRYPTO_DEV_SUN8I_CE_HASH y
-        patch_config CRYPTO_DEV_SUN8I_CE_PRNG y
-        patch_config CRYPTO_DEV_SUN8I_CE_TRNG y
+        # patch_config CRYPTO_DEV_SUN8I_CE y
+        # patch_config CRYPTO_DEV_SUN8I_CE_HASH y
+        # patch_config CRYPTO_DEV_SUN8I_CE_PRNG y
+        # patch_config CRYPTO_DEV_SUN8I_CE_TRNG y
 
-        patch_config SPI_SUN6I m
-        patch_config PHY_SUN4I_USB m
+        # patch_config SPI_SUN6I m
+        # patch_config PHY_SUN4I_USB m
 
-        patch_config SUN50I_IOMMU y
-        patch_config SUN8I_DE2_CCU y
-        patch_config SUN8I_DSP_REMOTEPROC y
-        patch_config SUN8I_THERMAL y
-        patch_config SUNXI_WATCHDOG y
+        # patch_config SUN50I_IOMMU y
+        # patch_config SUN8I_DE2_CCU y
+        # patch_config SUN8I_DSP_REMOTEPROC y
+        # patch_config SUN8I_THERMAL y
+        # patch_config SUNXI_WATCHDOG y
 
-        patch_config GPIO_SYSFS y
-        # patch_config EXPORT y
-        # patch_config VMLINUX_MAP y
+        # patch_config GPIO_SYSFS y
+        # # patch_config EXPORT y
+        # # patch_config VMLINUX_MAP y
 
-        # these needs to be built-in (probably)
-        patch_config EXT4_FS y
-        patch_config MMC y
-        patch_config MMC_SUNXI y
+        # patch_config NVMEM_SUNXI_SID y
 
-        # apply defaults
-        make CROSS_COMPILE="${CROSS_COMPILE}" ARCH="${ARCH}" -j "${NPROC}" -C linux-build olddefconfig
+        # # these needs to be built-in (probably)
+        # patch_config EXT4_FS y
+        # patch_config MMC y
+        # patch_config MMC_SUNXI y
+
+        # # apply defaults
+        # make CROSS_COMPILE="${CROSS_COMPILE}" ARCH="${ARCH}" -j "${NPROC}" -C ../linux-build olddefconfig
         ;;
 
     *)
@@ -236,7 +252,12 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ]; then
     esac
 
     # compile it!
+    cd ..
     make CROSS_COMPILE="${CROSS_COMPILE}" ARCH="${ARCH}" -j "${NPROC}" -C linux-build
+
+    KERNEL_RELEASE=$(make ARCH="${ARCH}" -C linux-build -s kernelversion)
+    echo "compiled kernel version '$KERNEL_RELEASE'"
+
     cp linux-build/arch/riscv/boot/Image.gz "${OUT_DIR}"
     cp linux-build/arch/riscv/boot/Image "${OUT_DIR}"
 fi

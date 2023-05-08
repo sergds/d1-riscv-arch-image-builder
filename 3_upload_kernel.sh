@@ -39,8 +39,7 @@ scp -r "$MNT/$MODULES" "$SSH_TARGET":"$tmpfile"
 
 # write install script
 echo "writing install.sh..."
-$SSH sh -c "cat <<EOF > "$tmpfile"/install.sh
-#!/usr/bin/sh
+cat "#!/usr/bin/sh
 
 set -e
 set -x
@@ -69,8 +68,7 @@ mv 8723ds.ko /usr/lib/modules/"$KERNEL_RELEASE"/kernel/drivers/net/wireless/8723
 mv Image /boot
 
 # depmod
-depmod -v
-EOF"
+depmod -v" | $SSH -T "cat > "$tmpfile"/install.sh"
 
 # run install script
 echo "running install.sh on ${SSH_TARGET}..."
