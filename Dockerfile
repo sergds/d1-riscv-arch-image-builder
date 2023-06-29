@@ -11,7 +11,7 @@ ADD 3_upload_kernel.sh 3_upload_kernel.sh
 
 RUN pacman-key --init 
 RUN pacman-key --populate archlinux
-RUN pacman -Syyu --noconfirm riscv64-linux-gnu-gcc swig cpio python3 python-setuptools base-devel bc git arch-install-scripts parted
+RUN pacman -Syyu --noconfirm --needed riscv64-linux-gnu-gcc swig cpio python3 python-setuptools base-devel bc git arch-install-scripts parted
 RUN aur-install qemu-user-static qemu-user-static-binfmt
 
 RUN sh 1_compile.sh output

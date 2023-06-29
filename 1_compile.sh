@@ -64,9 +64,7 @@ cd build
 
 if [ ! -f "${OUT_DIR}/fw_dynamic.bin" ]; then
     # build OpenSBI
-    DIR='opensbi'
-    clean_dir ${DIR}
-    clean_dir ${DIR}.tar.xz
+    clean_dir "opensbi-${VERSION_OPENSBI}-rv-bin"
 
     curl -O -L ${SOURCE_OPENSBI}
     tar -xf "opensbi-${VERSION_OPENSBI}-rv-bin.tar.xz"
@@ -90,17 +88,17 @@ if [ ! -f "${OUT_DIR}/u-boot-sunxi-with-spl.bin" ]; then
 fi
 
 if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ]; then
-    # TODO use archlinux-riscv kernel
-
     # build kernel
     DIR='linux'
     clean_dir ${DIR}
     clean_dir ${DIR}-build
 
-    # try not to clone complete linux source tree here!
-    git clone --depth 1 "${SOURCE_KERNEL}" -b "${TAG_KERNEL}"
+    curl -O -L ${SOURCE_KERNEL}
+    tar -xf "v${VERSION_KERNEL}.tar.gz"
+    rm "v${VERSION_KERNEL}.tar.gz"
+    mv linux-${VERSION_KERNEL} ${DIR}
     cd ${DIR}
-    pin_commit "${COMMIT_KERNEL}"
+
     # fix kernel version
     touch .scmversion
 
@@ -190,59 +188,19 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ]; then
         ;;
 
     'arch')
-        # # https://archriscv.felixc.at/repo/core/linux-5.17.3.arch1-1-riscv64.pkg.tar.zst
-        # # setup linux-build
-        # make ARCH="${ARCH}" -C linux O=../linux-build nezha_defconfig
-        # # deploy config
-        # cp ../../linux-5.17.3.arch1-1-riscv64.config linux-build/.config
-        # # apply defaults
-        # make CROSS_COMPILE="${CROSS_COMPILE}" ARCH="${ARCH}" -j "${NPROC}" -C ../linux-build olddefconfig
+        # generate default config (and directory)
+        make ARCH="${ARCH}" O=../linux-build defconfig
 
-        # # patch config
-        # patch_config ARCH_FLATMEM_ENABLE y
-        # patch_config RISCV_DMA_NONCOHERENT y
-        # patch_config RISCV_SBI_V01 y
-        # patch_config HVC_RISCV_SBI y
-        # patch_config SERIAL_EARLYCON_RISCV_SBI y
-        # patch_config BROKEN_ON_SMP y
+        # deploy Arch's confi
+        # TODO keep this up to date automatically somehow
+        cp ../../6.3.5-arch1.config ../linux-build/.config
 
-        # patch_config ARCH_SUNXI y
-        # patch_config ERRATA_THEAD y
+        # THIS DOESN'T WORK RIGHT NOW
+        # TODO
 
-        # patch_config DRM_SUN4I m
-        # patch_config DRM_SUN6I_DSI m
-        # patch_config DRM_SUN8I_DW_HDMI m
-        # patch_config DRM_SUN8I_MIXER m
-        # patch_config DRM_SUN4I_HDMI n
-        # patch_config DRM_SUN4I_BACKEND n
+        # default anything new
+        make ARCH="${ARCH}" O=../linux-build olddefconfig
 
-        # patch_config CRYPTO_DEV_SUN8I_CE y
-        # patch_config CRYPTO_DEV_SUN8I_CE_HASH y
-        # patch_config CRYPTO_DEV_SUN8I_CE_PRNG y
-        # patch_config CRYPTO_DEV_SUN8I_CE_TRNG y
-
-        # patch_config SPI_SUN6I m
-        # patch_config PHY_SUN4I_USB m
-
-        # patch_config SUN50I_IOMMU y
-        # patch_config SUN8I_DE2_CCU y
-        # patch_config SUN8I_DSP_REMOTEPROC y
-        # patch_config SUN8I_THERMAL y
-        # patch_config SUNXI_WATCHDOG y
-
-        # patch_config GPIO_SYSFS y
-        # # patch_config EXPORT y
-        # # patch_config VMLINUX_MAP y
-
-        # patch_config NVMEM_SUNXI_SID y
-
-        # # these needs to be built-in (probably)
-        # patch_config EXT4_FS y
-        # patch_config MMC y
-        # patch_config MMC_SUNXI y
-
-        # # apply defaults
-        # make CROSS_COMPILE="${CROSS_COMPILE}" ARCH="${ARCH}" -j "${NPROC}" -C ../linux-build olddefconfig
         ;;
 
     *)

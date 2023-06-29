@@ -39,7 +39,7 @@ scp -r "$MNT/$MODULES" "$SSH_TARGET":"$tmpfile"
 
 # write install script
 echo "writing install.sh..."
-cat "#!/usr/bin/sh
+echo "#!/usr/bin/sh
 
 set -e
 set -x
