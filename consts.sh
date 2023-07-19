@@ -16,12 +16,16 @@ export KERNEL='defconfig'
 # Device Tree:
 # In the current pinned U-Boot Commit the following device trees are available
 # for the D1:
-# u-boot/arch/riscv/dts/sun20i-d1-lichee-rv-86-panel.dtb
-# u-boot/arch/riscv/dts/sun20i-d1-lichee-rv-dock.dtb
-# u-boot/arch/riscv/dts/sun20i-d1-lichee-rv.dtb
-# u-boot/arch/riscv/dts/sun20i-d1-mangopi-mq-pro.dts
-# u-boot/arch/riscv/dts/sun20i-d1-nezha.dtb
-export DTB=u-boot/arch/riscv/dts/sun20i-d1-lichee-rv-dock.dtb
+# sun20i-d1-clockworkpi-v3.14
+# sun20i-d1-devterm-v3.14
+# sun20i-d1-dongshan-nezha-stu
+# sun20i-d1-lichee-rv-86-panel-480p
+# sun20i-d1-lichee-rv-86-panel-720p
+# sun20i-d1-lichee-rv-dock
+# sun20i-d1-lichee-rv
+# sun20i-d1-mangopi-mq-pro
+# sun20i-d1-nezha
+export DEVICE_TREE=sun20i-d1-lichee-rv-dock
 
 # folder to mount rootfs
 export MNT='mnt'
