@@ -1,7 +1,7 @@
 #!/usr/bin/sh
 
 set -e
-# set -x
+set -x
 
 . ./consts.sh
 
@@ -43,6 +43,8 @@ if [ "${USE_CHROOT}" != 0 ]; then
 fi
 check_sd_card_is_block_device "${DEVICE}"
 check_root_fs
+pwd
+ls
 for FILE in 8723ds.ko u-boot-sunxi-with-spl.bin Image.gz Image; do
     check_required_file "${OUT_DIR}/${FILE}"
 done
