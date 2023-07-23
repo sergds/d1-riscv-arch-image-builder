@@ -76,16 +76,11 @@ ${SUDO} mount "${DEVICE}${PART_IDENTITYFIER}1" "${MNT}/boot"
 ${SUDO} tar -xv --zstd -f "${ROOT_FS}" -C "${MNT}"
 
 # install kernel and modules
+KERNEL_RELEASE=$(make ARCH="${ARCH}" -s kernelversion -C build/linux-build)
 ${SUDO} cp "${OUT_DIR}/Image.gz" "${OUT_DIR}/Image" "${MNT}/boot/"
-rm -r build/linux-modules || true
-mkdir build/linux-modules
-cd build/linux-build
-KERNEL_RELEASE=$(make ARCH="${ARCH}" -s kernelversion)
-make ARCH="${ARCH}" INSTALL_MOD_PATH="../build/linux-modules" KERNELRELEASE="${KERNEL_RELEASE}" modules_install
-echo 'copying modules ...'
-${SUDO} cp -a ../build/linux-modules/lib/modules ../../${MNT}/lib/
-cd ../..
-rm -r build/linux-modules
+
+${SUDO} mkdir -p "${MNT}/lib/modules"
+${SUDO} cp -a "${OUT_DIR}/modules/${KERNEL_RELEASE}" "${MNT}/lib/modules"
 ${SUDO} install -D -p -m 644 "${OUT_DIR}/8723ds.ko" "${MNT}/lib/modules/${KERNEL_RELEASE}/kernel/drivers/net/wireless/8723ds.ko"
 
 ${SUDO} rm "${MNT}/lib/modules/${KERNEL_RELEASE}/build"

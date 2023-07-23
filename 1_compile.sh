@@ -92,6 +92,7 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ]; then
     DIR='linux'
     clean_dir ${DIR}
     clean_dir ${DIR}-build
+    clean_dir ${DIR}-modules
 
     curl -O -L ${SOURCE_KERNEL}
     tar -xf "v${VERSION_KERNEL}.tar.gz"
@@ -211,13 +212,18 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ]; then
 
     # compile it!
     cd ..
-    make CROSS_COMPILE="${CROSS_COMPILE}" ARCH="${ARCH}" -j "${NPROC}" -C linux-build
+    make CROSS_COMPILE="${CROSS_COMPILE}" ARCH="${ARCH}" -j "${NPROC}" -C ${DIR}-build
 
-    KERNEL_RELEASE=$(make ARCH="${ARCH}" -C linux-build -s kernelversion)
+    KERNEL_RELEASE=$(make ARCH="${ARCH}" -C ${DIR}-build -s kernelversion)
     echo "compiled kernel version '$KERNEL_RELEASE'"
 
-    cp linux-build/arch/riscv/boot/Image.gz "${OUT_DIR}"
-    cp linux-build/arch/riscv/boot/Image "${OUT_DIR}"
+    cp ${DIR}-build/arch/riscv/boot/Image.gz "${OUT_DIR}"
+    cp ${DIR}-build/arch/riscv/boot/Image "${OUT_DIR}"
+
+    # prepare modules
+    mkdir ${DIR}-modules
+    make ARCH="${ARCH}" INSTALL_MOD_PATH="../${DIR}-modules" KERNELRELEASE="${KERNEL_RELEASE}" -C ${DIR}-build modules_install
+    mv ${DIR}-modules/lib/modules "${OUT_DIR}"
 fi
 
 if [ ! -f "${OUT_DIR}/8723ds.ko" ]; then

@@ -28,7 +28,7 @@ export KERNEL='defconfig'
 export DEVICE_TREE=sun20i-d1-lichee-rv-dock
 
 # folder to mount rootfs
-export MNT='mnt'
+export MNT="${PWD}/mnt"
 # folder to store compiled artifacts
 export OUT_DIR="${PWD}/output"
 
