@@ -14,7 +14,7 @@ RUN pacman-key --populate archlinux
 RUN pacman -Syyu --noconfirm --needed riscv64-linux-gnu-gcc swig cpio python3 python-setuptools base-devel bc git arch-install-scripts parted
 RUN aur-install qemu-user-static qemu-user-static-binfmt
 
-RUN sh 1_compile.sh output
+RUN sh 1_compile.sh
 # RUN dd if=/dev/zero of=./archlinux_riscv.img bs=1M count=1500
 # RUN losetup /dev/loop17 archlinux_riscv.img
 # RUN sh 2_create_sd.sh /dev/loop17
