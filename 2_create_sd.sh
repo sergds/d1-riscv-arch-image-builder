@@ -27,6 +27,13 @@ check_required_file() {
     fi
 }
 
+check_required_folder() {
+    if [ ! -d "${1}" ]; then
+        echo "Missing directory: ${1}, did you compile everything first?"
+        exit 1
+    fi
+}
+
 probe_partition_separator() {
     _DEVICE=${1}
 
@@ -43,10 +50,11 @@ if [ "${USE_CHROOT}" != 0 ]; then
 fi
 check_sd_card_is_block_device "${DEVICE}"
 check_root_fs
-pwd
-ls
 for FILE in 8723ds.ko u-boot-sunxi-with-spl.bin Image.gz Image; do
     check_required_file "${OUT_DIR}/${FILE}"
+done
+for DIR in modules; do
+    check_required_folder "${OUT_DIR}/${DIR}"
 done
 
 # format disk
@@ -78,7 +86,8 @@ ${SUDO} mount "${DEVICE}${PART_IDENTITYFIER}1" "${MNT}/boot"
 ${SUDO} tar -xv --zstd -f "${ROOT_FS}" -C "${MNT}"
 
 # install kernel and modules
-KERNEL_RELEASE=$(make ARCH="${ARCH}" -s kernelversion -C build/linux-build)
+# KERNEL_RELEASE=$(make ARCH="${ARCH}" -s kernelversion -C build/linux-build)
+KERNEL_RELEASE=$(ls output/modules)
 ${SUDO} cp "${OUT_DIR}/Image.gz" "${OUT_DIR}/Image" "${MNT}/boot/"
 
 ${SUDO} mkdir -p "${MNT}/lib/modules"

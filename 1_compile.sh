@@ -1,7 +1,7 @@
 #!/usr/bin/sh
 
 set -e
-set -x
+# set -x
 
 . ./consts.sh
 
