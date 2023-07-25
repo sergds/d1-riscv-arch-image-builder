@@ -25,4 +25,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: archlinux_riscv.img.tar.gz
-        path: /home/runner/work/riscv-arch-image-builder/riscv-arch-image-builder/archlinux_riscv.img.tar.gz
+        path: /home/runner/work/d1-riscv-arch-image-builder/d1-riscv-arch-image-builder/archlinux_riscv.img.tar.gz

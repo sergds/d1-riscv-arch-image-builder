@@ -10,4 +10,7 @@ docker cp build_riscv:/home/runner/work/riscv-arch-image-builder/riscv-arch-imag
 
 # create linux image
 sudo CI_BUILD=1 ./2_create_sd.sh /dev/loop17
+
+sync
+sudo losetup -d /dev/loop17
 tar -zcvf archlinux_riscv.img.tar.gz archlinux_riscv.img
