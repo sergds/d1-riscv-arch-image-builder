@@ -6,7 +6,7 @@ sudo losetup /dev/loop17 ./archlinux_riscv.img
 
 # compile files
 docker run --name build_riscv riscv-arch-image:${1}
-docker cp build_riscv:/home/runner/work/riscv-arch-image-builder/riscv-arch-image-builder/output .
+docker cp build_riscv:/home/runner/work/d1-riscv-arch-image-builder/d1-riscv-arch-image-builder/output .
 
 # create linux image
 sudo CI_BUILD=1 ./2_create_sd.sh /dev/loop17

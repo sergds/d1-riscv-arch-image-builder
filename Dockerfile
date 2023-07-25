@@ -1,6 +1,6 @@
 FROM ghcr.io/greyltc-org/archlinux-aur
 
-WORKDIR /home/runner/work/riscv-arch-image-builder/riscv-arch-image-builder
+WORKDIR /home/runner/work/d1-riscv-arch-image-builder/d1-riscv-arch-image-builder
 
 ADD 1_compile.sh 1_compile.sh
 ADD 2_create_sd.sh 2_create_sd.sh
