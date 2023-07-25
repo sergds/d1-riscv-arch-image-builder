@@ -4,7 +4,7 @@ These scripts compile, copy, bake, unpack and flash a [ready](https://wiki.archl
 
 Special thanks to **smaeul** for all their work!
 
-Find a **precompiled image** under the [Actions](https://github.com/sehraf/riscv-arch-image-builder/actions) artifacts.
+Find a **precompiled image** under the [Actions](https://github.com/sehraf/riscv-arch-image-builder/actions) artifacts. The image has _no_ configuration or whatsoever!
 
 Also have a look at the forks that have emerged over time or similar projects like a [make file based approch](https://github.com/hyx0329/riscv-archlinux-d1).
 
@@ -14,14 +14,11 @@ There are multiple sources for an Archlinux image:
 - https://github.com/thefossguy/archlinux-visionfive2
 
 ## Components
-- Boot0 based on https://github.com/smaeul/sun20i_d1_spl
-- OpenSBI based on https://github.com/smaeul/opensbi
+- mainline OpenSBI
 - U-Boot based on https://github.com/smaeul/u-boot.git
-- Kernel based on https://github.com/smaeul/linux
+- mainline kernel
 - WiFi driver (rtl8723ds) based on https://github.com/lwfinger/rtl8723ds
 - RootFS based on https://archriscv.felixc.at (root password is ~~`sifive`~~ `archriscv`)
-
-## How to build
 
 ## How to build
 1. Install requirements: `pacman -Sy riscv64-linux-gnu-gcc swig cpio python3 python-setuptools base-devel bc`
@@ -46,6 +43,13 @@ The second script uses `sudo` for root access. Like any random script from a ran
 Things are rebuild whenever the corresponding `output/<file>` is missing. For example, the kernel is rebuilt when there is no `Image` file.
 
 # Status
+
+## 25.07.2023
+- forgot to keep this up to date...
+- mainline kernel fully supports the D1
+- kernel updated to 6.4 (mainline)
+- OpenSBI updated to 1.3
+
 ## 4.11.2022
 - WiFi is working again
 
