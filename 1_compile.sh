@@ -178,6 +178,13 @@ if [ ! -f "${OUT_DIR}/Image" ] || [ ! -f "${OUT_DIR}/Image.gz" ]; then
         # enable binfmt_misc
         patch_config BINFMT_MISC y
 
+        # custom
+        patch_config BPF_SYSCALL y
+        patch_config VIDEO_DEV m
+        patch_config USB_GSPCA m
+        patch_config USB_GSPCA_OV534 m
+        
+
         # debug options
         if [ $DEBUG = 'y' ]; then
             patch_config DEBUG_INFO y
